@@ -6,16 +6,16 @@ import (
 
 // SearchParams represents common search parameters across all engines
 type SearchParams struct {
-	Query      string `json:"query" jsonschema:"description=Search query"`
-	Location   string `json:"location,omitempty" jsonschema:"description=Search location"`
-	Language   string `json:"language,omitempty" jsonschema:"description=Search language (e.g., 'en')"`
-	Country    string `json:"country,omitempty" jsonschema:"description=Country code (e.g., 'us')"`
-	NumResults int    `json:"num_results,omitempty" jsonschema:"description=Number of results (1-100),default=10"`
+	Query      string `json:"query" jsonschema:"description:Search query"`
+	Location   string `json:"location,omitempty" jsonschema:"description:Search location"`
+	Language   string `json:"language,omitempty" jsonschema:"description:Search language (e.g., 'en')"`
+	Country    string `json:"country,omitempty" jsonschema:"description:Country code (e.g., 'us')"`
+	NumResults int    `json:"num_results,omitempty" jsonschema:"description:Number of results (1-100),default:10"`
 }
 
 // ScrapeParams represents parameters for web scraping
 type ScrapeParams struct {
-	URL string `json:"url" jsonschema:"description=URL to scrape"`
+	URL string `json:"url" jsonschema:"description:URL to scrape"`
 }
 
 // SearchResult represents a common search result structure

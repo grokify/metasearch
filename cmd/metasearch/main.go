@@ -34,11 +34,11 @@ func main() {
 	var err error
 
 	if selectedEngine != "" {
-		engine, exists := registry.Get(selectedEngine)
+		engineSelected, exists := registry.Get(selectedEngine)
 		if !exists {
 			log.Fatalf("Engine '%s' not found. Available engines: %v", selectedEngine, registry.List())
 		}
-		engine = engine
+		engine = engineSelected
 	} else {
 		engine, err = metasearch.GetDefaultEngine(registry)
 		if err != nil {

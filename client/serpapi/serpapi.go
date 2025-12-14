@@ -60,6 +60,7 @@ func (e *Engine) GetSupportedTools() []string {
 		"google_search_reviews",
 		"google_search_shopping",
 		"google_search_scholar",
+		// Note: google_search_lens is NOT supported by SerpAPI
 		"google_search_autocomplete",
 		"webpage_scrape",
 	}
@@ -198,10 +199,9 @@ func (e *Engine) SearchScholar(ctx context.Context, params metasearch.SearchPara
 	return e.makeRequest(apiParams)
 }
 
-// SearchLens performs a visual search (not directly supported by SerpAPI)
+// SearchLens performs a visual search (not supported by SerpAPI)
 func (e *Engine) SearchLens(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
-	// SerpAPI doesn't have direct Google Lens support, fallback to image search
-	return e.SearchImages(ctx, params)
+	return nil, fmt.Errorf("google_search_lens is not supported by SerpAPI")
 }
 
 // SearchAutocomplete gets search suggestions

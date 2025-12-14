@@ -97,6 +97,8 @@ All searches support parameters like location, language, country, and number of 
 
 ## Library Usage
 
+### Basic Usage with Client SDK
+
 ```go
 package main
 
@@ -105,34 +107,20 @@ import (
     "log"
 
     "github.com/grokify/metasearch"
-    "github.com/grokify/metasearch/client/serper"
-    "github.com/grokify/metasearch/client/serpapi"
+    "github.com/grokify/metasearch/client"
 )
 
 func main() {
-    // Create registry and manually register engines
-    registry := metasearch.NewRegistry()
-    
-    // Register engines (handle errors as needed)
-    if serperEngine, err := serper.New(); err == nil {
-        registry.Register(serperEngine)
-    }
-    if serpApiEngine, err := serpapi.New(); err == nil {
-        registry.Register(serpApiEngine)
-    }
-    
-    // Get default engine (based on SEARCH_ENGINE env var)
-    engine, err := metasearch.GetDefaultEngine(registry)
+    // Create client (auto-registers all engines and selects based on SEARCH_ENGINE env var)
+    c, err := client.New()
     if err != nil {
-        log.Printf("Warning: %v", err) // May still have a fallback engine
+        log.Fatalf("Failed to create client: %v", err)
     }
-    
-    if engine == nil {
-        log.Fatal("No search engines available")
-    }
-    
+
+    log.Printf("Using engine: %s v%s", c.GetName(), c.GetVersion())
+
     // Perform a search
-    result, err := engine.Search(context.Background(), metasearch.SearchParams{
+    result, err := c.Search(context.Background(), metasearch.SearchParams{
         Query:      "golang programming",
         NumResults: 10,
         Language:   "en",
@@ -141,9 +129,81 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-    
+
     // Use the result
     log.Printf("Search completed: %+v", result.Data)
+}
+```
+
+### Selecting a Specific Engine
+
+```go
+// Create client with a specific engine
+c, err := client.NewWithEngine("serpapi")
+if err != nil {
+    log.Fatal(err)
+}
+
+// Or switch engines at runtime
+c.SetEngine("serper")
+```
+
+### Capability Checking
+
+The client SDK automatically checks if operations are supported by the current backend:
+
+```go
+c, _ := client.New()
+
+// Check if an operation is supported
+if c.SupportsOperation(client.OpSearchLens) {
+    result, err := c.SearchLens(ctx, params)
+    // ...
+} else {
+    log.Println("Current engine doesn't support Lens search")
+}
+
+// Or let the client return an error
+result, err := c.SearchLens(ctx, params)
+if errors.Is(err, client.ErrOperationNotSupported) {
+    log.Printf("Operation not supported: %v", err)
+}
+```
+
+### Advanced Usage with Registry
+
+For direct registry access:
+
+```go
+import (
+    "github.com/grokify/metasearch"
+    "github.com/grokify/metasearch/client/serper"
+    "github.com/grokify/metasearch/client/serpapi"
+)
+
+func main() {
+    // Create registry and manually register engines
+    registry := metasearch.NewRegistry()
+
+    // Register engines (handle errors as needed)
+    if serperEngine, err := serper.New(); err == nil {
+        registry.Register(serperEngine)
+    }
+    if serpApiEngine, err := serpapi.New(); err == nil {
+        registry.Register(serpApiEngine)
+    }
+
+    // Get default engine (based on SEARCH_ENGINE env var)
+    engine, err := metasearch.GetDefaultEngine(registry)
+    if err != nil {
+        log.Printf("Warning: %v", err)
+    }
+
+    // Perform a search
+    result, err := engine.Search(context.Background(), metasearch.SearchParams{
+        Query: "golang programming",
+    })
+    // ...
 }
 ```
 
@@ -153,13 +213,29 @@ func main() {
 - **Package**: `github.com/grokify/metasearch/client/serper`
 - **Environment Variable**: `SERPER_API_KEY`
 - **Website**: [serper.dev](https://serper.dev)
-- **All search types supported**
+- **Supported Operations**: All search types including Lens
 
 ### SerpAPI
 - **Package**: `github.com/grokify/metasearch/client/serpapi`
 - **Environment Variable**: `SERPAPI_API_KEY`
 - **Website**: [serpapi.com](https://serpapi.com)
-- **Most search types supported**
+- **Supported Operations**: All search types except Lens
+- **Note**: `SearchLens()` is not supported and will return `ErrOperationNotSupported`
+
+| Operation | Serper | SerpAPI |
+|-----------|--------|---------|
+| Web Search | ✓ | ✓ |
+| News Search | ✓ | ✓ |
+| Image Search | ✓ | ✓ |
+| Video Search | ✓ | ✓ |
+| Places Search | ✓ | ✓ |
+| Maps Search | ✓ | ✓ |
+| Reviews Search | ✓ | ✓ |
+| Shopping Search | ✓ | ✓ |
+| Scholar Search | ✓ | ✓ |
+| **Lens Search** | **✓** | **✗** |
+| Autocomplete | ✓ | ✓ |
+| Webpage Scrape | ✓ | ✓ |
 
 ## Available Search Methods
 

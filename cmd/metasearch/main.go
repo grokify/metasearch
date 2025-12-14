@@ -8,8 +8,7 @@ import (
 	"os"
 
 	"github.com/grokify/metasearch"
-	"github.com/grokify/metasearch/client/serpapi"
-	"github.com/grokify/metasearch/client/serper"
+	"github.com/grokify/metasearch/client"
 )
 
 func main() {
@@ -21,33 +20,23 @@ func main() {
 	}
 
 	query := os.Args[1]
-	var selectedEngine string
+	var engineName string
 	if len(os.Args) > 2 {
-		selectedEngine = os.Args[2]
+		engineName = os.Args[2]
 	}
 
-	// Create registry and register all available engines
-	registry := createRegistry()
-
-	// Get the engine to use
-	var engine metasearch.Engine
+	// Create client SDK
+	var c *client.Client
 	var err error
 
-	if selectedEngine != "" {
-		engineSelected, exists := registry.Get(selectedEngine)
-		if !exists {
-			log.Fatalf("Engine '%s' not found. Available engines: %v", selectedEngine, registry.List())
-		}
-		engine = engineSelected
+	if engineName != "" {
+		c, err = client.NewWithEngine(engineName)
 	} else {
-		engine, err = metasearch.GetDefaultEngine(registry)
-		if err != nil {
-			log.Printf("Warning: %v", err)
-		}
+		c, err = client.New()
 	}
 
-	if engine == nil {
-		log.Fatal("No search engine available")
+	if err != nil {
+		log.Fatalf("Failed to initialize client: %v", err)
 	}
 
 	// Perform search
@@ -56,7 +45,7 @@ func main() {
 		NumResults: 10,
 	}
 
-	result, err := engine.Search(context.Background(), params)
+	result, err := c.Search(context.Background(), params)
 	if err != nil {
 		log.Fatalf("Search failed: %v", err)
 	}
@@ -68,24 +57,4 @@ func main() {
 	}
 
 	fmt.Println(string(output))
-}
-
-// createRegistry creates a new registry with all available engines pre-registered
-func createRegistry() *metasearch.Registry {
-	registry := metasearch.NewRegistry()
-
-	// Register available engines
-	if serperEngine, err := serper.New(); err == nil {
-		registry.Register(serperEngine)
-	} else {
-		log.Printf("Failed to initialize Serper engine: %v", err)
-	}
-
-	if serpApiEngine, err := serpapi.New(); err == nil {
-		registry.Register(serpApiEngine)
-	} else {
-		log.Printf("Failed to initialize SerpAPI engine: %v", err)
-	}
-
-	return registry
 }

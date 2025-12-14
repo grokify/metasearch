@@ -1,4 +1,4 @@
-# Metasearch Package
+# Metasearch Multi-Search Client and MCP Server
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Lint Status][lint-status-svg]][lint-status-url]

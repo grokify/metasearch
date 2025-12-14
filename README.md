@@ -14,6 +14,7 @@ A modular, plugin-based search engine abstraction package for Go that provides a
 The `metasearch` package provides:
 
 - **Unified Client SDK**: Single API that fronts multiple search engine backends (`client/client.go`)
+- **Normalized Responses**: Optional unified response structures across all engines (engine-agnostic)
 - **Capability Checking**: Automatic validation of operation support across different backends
 - **Unified Interface**: Common `Engine` interface for all search providers
 - **Plugin Architecture**: Easy addition of new search engines
@@ -71,8 +72,11 @@ metasearch/
 │   ├── metasearch/      # CLI tool
 │   └── mcpserver/       # MCP server for AI integration
 ├── examples/            # Example programs
-│   └── capability_check.go  # Demonstrates capability checking
+│   ├── capability_check/   # Capability checking demo
+│   └── normalized_search/  # Normalized responses demo
 ├── types.go             # Core types and Engine interface
+├── normalized.go        # Normalized response types
+├── normalizer.go        # Response normalizer
 ├── metasearch.go        # Utility functions
 └── README.md
 ```
@@ -212,6 +216,60 @@ The SDK provides constants for all operations:
 - `client.OpSearchLens` - Lens search (Serper only)
 - `client.OpSearchAutocomplete` - Autocomplete
 - `client.OpScrapeWebpage` - Webpage scraping
+
+### Normalized Responses
+
+The client SDK provides **optional normalized response methods** that return unified structures across all search engines:
+
+```go
+// Use *Normalized() methods for engine-agnostic response structures
+normalized, err := c.SearchNormalized(ctx, params)
+
+// Access results in a consistent format regardless of engine
+for _, result := range normalized.OrganicResults {
+    fmt.Printf("%s: %s\n", result.Title, result.Link)
+}
+
+// Switch engines without changing your code!
+c.SetEngine("serpapi")
+normalized, err = c.SearchNormalized(ctx, params) // Same structure!
+```
+
+**Available Normalized Methods:**
+- `SearchNormalized()` - Web search with normalized results
+- `SearchNewsNormalized()` - News search with normalized results
+- `SearchImagesNormalized()` - Image search with normalized results
+
+**Benefits:**
+- **Engine-Agnostic**: Same code works with any backend
+- **Type-Safe**: Strongly-typed result structures
+- **Optional**: Raw responses still available via standard methods
+- **Complete**: Preserves original response in `Raw` field
+
+**Example Normalized Structure:**
+```go
+type NormalizedSearchResult struct {
+    OrganicResults  []OrganicResult    // Standard search results
+    AnswerBox       *AnswerBox         // Featured answer
+    KnowledgeGraph  *KnowledgeGraph    // Knowledge panel
+    RelatedSearches []RelatedSearch    // Related queries
+    PeopleAlsoAsk   []PeopleAlsoAsk   // PAA questions
+    NewsResults     []NewsResult       // News articles
+    ImageResults    []ImageResult      // Images
+    SearchMetadata  SearchMetadata     // Search info
+    Raw             *SearchResult      // Original response
+}
+```
+
+**Comparison: Raw vs Normalized**
+
+| Aspect | Raw Response | Normalized Response |
+|--------|--------------|---------------------|
+| Field names | Engine-specific | Unified |
+| Structure | Varies by engine | Consistent |
+| Engine switching | Requires code changes | No changes needed |
+| Type safety | `interface{}` | Strongly typed |
+| Use case | Engine-specific features | Engine-agnostic apps |
 
 ## Library Usage
 
@@ -557,13 +615,19 @@ if err != nil {
 
 See the `examples/` directory for working examples:
 
-- **`capability_check.go`**: Demonstrates capability checking, engine switching, and operation support matrix
+- **`capability_check/`**: Demonstrates capability checking, engine switching, and operation support matrix
+- **`normalized_search/`**: Shows normalized responses and engine-agnostic code
 
 To run an example:
 ```bash
 export SERPER_API_KEY="your_key"
 export SERPAPI_API_KEY="your_key"  # optional
-go run examples/capability_check.go
+
+# Check capabilities
+go run examples/capability_check/main.go
+
+# Demonstrate normalized responses
+go run examples/normalized_search/main.go "golang programming"
 ```
 
 ## Testing

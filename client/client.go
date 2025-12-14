@@ -289,3 +289,38 @@ func (c *Client) ScrapeWebpage(ctx context.Context, params metasearch.ScrapePara
 	}
 	return c.engine.ScrapeWebpage(ctx, params)
 }
+
+// Normalized response methods - these return unified response structures across all engines
+
+// SearchNormalized performs a web search and returns a normalized response
+func (c *Client) SearchNormalized(ctx context.Context, params metasearch.SearchParams) (*metasearch.NormalizedSearchResult, error) {
+	result, err := c.Search(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	normalizer := metasearch.NewNormalizer(c.GetName())
+	return normalizer.NormalizeSearch(result, params.Query)
+}
+
+// SearchNewsNormalized performs a news search and returns a normalized response
+func (c *Client) SearchNewsNormalized(ctx context.Context, params metasearch.SearchParams) (*metasearch.NormalizedSearchResult, error) {
+	result, err := c.SearchNews(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	normalizer := metasearch.NewNormalizer(c.GetName())
+	return normalizer.NormalizeNews(result, params.Query)
+}
+
+// SearchImagesNormalized performs an image search and returns a normalized response
+func (c *Client) SearchImagesNormalized(ctx context.Context, params metasearch.SearchParams) (*metasearch.NormalizedSearchResult, error) {
+	result, err := c.SearchImages(ctx, params)
+	if err != nil {
+		return nil, err
+	}
+
+	normalizer := metasearch.NewNormalizer(c.GetName())
+	return normalizer.NormalizeImages(result, params.Query)
+}

@@ -13,12 +13,69 @@ A modular, plugin-based search engine abstraction package for Go that provides a
 
 The `metasearch` package provides:
 
+- **Unified Client SDK**: Single API that fronts multiple search engine backends (`client/client.go`)
+- **Capability Checking**: Automatic validation of operation support across different backends
 - **Unified Interface**: Common `Engine` interface for all search providers
 - **Plugin Architecture**: Easy addition of new search engines
 - **Multiple Providers**: Built-in support for Serper and SerpAPI
 - **Type Safety**: Structured parameter and result types
 - **Registry System**: Automatic discovery and management of engines
 - **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcpserver`)
+- **CLI Tool**: Command-line interface for quick searches (`cmd/metasearch`)
+
+## Quick Start
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+
+    "github.com/grokify/metasearch"
+    "github.com/grokify/metasearch/client"
+)
+
+func main() {
+    // Set API key
+    // export SERPER_API_KEY="your_key"
+
+    // Create client (auto-selects engine)
+    c, err := client.New()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Perform a search
+    result, err := c.Search(context.Background(), metasearch.SearchParams{
+        Query: "golang programming",
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Printf("Results: %+v\n", result.Data)
+}
+```
+
+## Project Structure
+
+```
+metasearch/
+├── client/              # Search engine client implementations
+│   ├── client.go        # Unified Client SDK with capability checking
+│   ├── serper/          # Serper.dev implementation
+│   └── serpapi/         # SerpAPI implementation
+├── cmd/                 # Executable applications
+│   ├── metasearch/      # CLI tool
+│   └── mcpserver/       # MCP server for AI integration
+├── examples/            # Example programs
+│   └── capability_check.go  # Demonstrates capability checking
+├── types.go             # Core types and Engine interface
+├── metasearch.go        # Utility functions
+└── README.md
+```
 
 ## Applications
 
@@ -34,16 +91,15 @@ go build ./cmd/metasearch
 # Set API key
 export SERPER_API_KEY="your_api_key"
 
-# Basic search
-./metasearch "golang programming"
+# Basic search (specify engine and query)
+./metasearch -e serper -q "golang programming"
 
-# Specify engine
-./metasearch "golang programming" serper
-./metasearch "golang programming" serpapi
+# Or use long flags
+./metasearch --engine serpapi --query "golang programming"
 
-# Use environment variable for default engine
-export SEARCH_ENGINE="serpapi"
-./metasearch "golang programming"
+# With SerpAPI
+export SERPAPI_API_KEY="your_api_key"
+./metasearch -e serpapi -q "golang programming"
 ```
 
 ### MCP Server
@@ -80,7 +136,12 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 
 #### Features
 
-The MCP server provides tools for:
+The MCP server **dynamically registers only the tools supported by the current search engine backend**. This means:
+
+- When using **Serper**, all 12 tools are available including Lens search
+- When using **SerpAPI**, 11 tools are available (Lens is excluded)
+
+Available tool categories:
 - **Web Search**: General web searches with customizable parameters
 - **News Search**: Search news articles
 - **Image Search**: Search for images
@@ -90,10 +151,67 @@ The MCP server provides tools for:
 - **Reviews Search**: Search reviews
 - **Shopping Search**: Search shopping/product listings
 - **Scholar Search**: Search academic papers
-- **Lens Search**: Visual search capabilities
+- **Lens Search**: Visual search capabilities (Serper only)
 - **Autocomplete**: Get search suggestions
+- **Webpage Scrape**: Extract content from webpages
 
 All searches support parameters like location, language, country, and number of results.
+
+**Server Logs**: The MCP server logs which tools were registered and which were skipped:
+```
+2025/12/13 19:00:00 Using engine: serpapi v1.0.0
+2025/12/13 19:00:00 Registered 11 tools: [google_search, google_search_news, ...]
+2025/12/13 19:00:00 Skipped 1 unsupported tools: [google_search_lens]
+```
+
+## Client SDK
+
+The `client` package provides a high-level SDK that simplifies working with multiple search engines:
+
+### Key Features
+
+- **Auto-registration**: Automatically discovers and registers all available engines
+- **Smart selection**: Uses `SEARCH_ENGINE` environment variable or defaults to Serper
+- **Runtime switching**: Switch between engines without recreating the client
+- **Capability checking**: Validates operations before calling backends
+- **Error handling**: Returns `ErrOperationNotSupported` for unsupported operations
+- **Clean API**: Implements the same `Engine` interface, proxying to the selected backend
+
+### Quick Start
+
+```go
+import "github.com/grokify/metasearch/client"
+
+// Create client - auto-selects engine based on SEARCH_ENGINE env var
+c, err := client.New()
+
+// Or specify engine explicitly
+c, err := client.NewWithEngine("serper")
+
+// Check support before calling
+if c.SupportsOperation(client.OpSearchLens) {
+    result, _ := c.SearchLens(ctx, params)
+}
+
+// Switch engines at runtime
+c.SetEngine("serpapi")
+```
+
+### Operation Constants
+
+The SDK provides constants for all operations:
+- `client.OpSearch` - Web search
+- `client.OpSearchNews` - News search
+- `client.OpSearchImages` - Image search
+- `client.OpSearchVideos` - Video search
+- `client.OpSearchPlaces` - Places search
+- `client.OpSearchMaps` - Maps search
+- `client.OpSearchReviews` - Reviews search
+- `client.OpSearchShopping` - Shopping search
+- `client.OpSearchScholar` - Scholar search
+- `client.OpSearchLens` - Lens search (Serper only)
+- `client.OpSearchAutocomplete` - Autocomplete
+- `client.OpScrapeWebpage` - Webpage scraping
 
 ## Library Usage
 
@@ -433,6 +551,33 @@ if err != nil {
     // Handle search error
     log.Printf("Search failed: %v", err)
 }
+```
+
+## Examples
+
+See the `examples/` directory for working examples:
+
+- **`capability_check.go`**: Demonstrates capability checking, engine switching, and operation support matrix
+
+To run an example:
+```bash
+export SERPER_API_KEY="your_key"
+export SERPAPI_API_KEY="your_key"  # optional
+go run examples/capability_check.go
+```
+
+## Testing
+
+Run tests without API keys (tests will skip gracefully):
+```bash
+go test ./...
+```
+
+Run tests with API calls (requires API keys):
+```bash
+export SERPER_API_KEY="your_key"
+export SERPAPI_API_KEY="your_key"
+go test -v ./client
 ```
 
 ## Thread Safety

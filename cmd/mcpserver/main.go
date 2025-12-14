@@ -12,6 +12,13 @@ import (
 	"github.com/grokify/metasearch/client"
 )
 
+// ToolDefinition defines a search tool with its metadata
+type ToolDefinition struct {
+	Name        string
+	Description string
+	SearchFunc  func(context.Context, metasearch.SearchParams) (*metasearch.SearchResult, error)
+}
+
 func main() {
 	// Initialize client SDK with all available engines
 	searchClient, err := client.New()
@@ -19,6 +26,7 @@ func main() {
 		log.Fatalf("Failed to initialize client: %v", err)
 	}
 
+	log.Printf("Using engine: %s v%s", searchClient.GetName(), searchClient.GetVersion())
 	log.Printf("Available engines: %v", searchClient.ListEngines())
 
 	// Create MCP server
@@ -27,15 +35,64 @@ func main() {
 		Version: "2.0.0",
 	}, nil)
 
-	// Register search tools dynamically based on supported tools
-	registerSearchTool := func(toolName, description string, searchFunc func(context.Context, metasearch.SearchParams) (*metasearch.SearchResult, error)) {
+	// Define all possible search tools with their operation names
+	allTools := []ToolDefinition{
+		{client.OpSearch, "Perform a Google web search", searchClient.Search},
+		{client.OpSearchNews, "Search for news articles using Google News", searchClient.SearchNews},
+		{client.OpSearchImages, "Search for images using Google Images", searchClient.SearchImages},
+		{client.OpSearchVideos, "Search for videos using Google Videos", searchClient.SearchVideos},
+		{client.OpSearchPlaces, "Search for places using Google Places", searchClient.SearchPlaces},
+		{client.OpSearchMaps, "Search for locations using Google Maps", searchClient.SearchMaps},
+		{client.OpSearchReviews, "Search for reviews", searchClient.SearchReviews},
+		{client.OpSearchShopping, "Search for products using Google Shopping", searchClient.SearchShopping},
+		{client.OpSearchScholar, "Search for academic papers using Google Scholar", searchClient.SearchScholar},
+		{client.OpSearchLens, "Perform visual search using Google Lens", searchClient.SearchLens},
+		{client.OpSearchAutocomplete, "Get search suggestions using Google Autocomplete", searchClient.SearchAutocomplete},
+	}
+
+	// Register tools only if supported by the current engine
+	registeredTools := []string{}
+	skippedTools := []string{}
+
+	for _, tool := range allTools {
+		if searchClient.SupportsOperation(tool.Name) {
+			// Register this tool
+			toolName := tool.Name
+			toolDesc := tool.Description
+			searchFunc := tool.SearchFunc
+
+			mcp.AddTool(server, &mcp.Tool{
+				Name:        toolName,
+				Description: toolDesc,
+			}, func(ctx context.Context, req *mcp.CallToolRequest, args metasearch.SearchParams) (*mcp.CallToolResult, any, error) {
+				result, err := searchFunc(ctx, args)
+				if err != nil {
+					return nil, nil, fmt.Errorf("%s failed: %w", toolName, err)
+				}
+
+				resultJSON, _ := json.MarshalIndent(result.Data, "", "  ")
+				return &mcp.CallToolResult{
+					Content: []mcp.Content{
+						&mcp.TextContent{Text: string(resultJSON)},
+					},
+				}, nil, nil
+			})
+
+			registeredTools = append(registeredTools, tool.Name)
+		} else {
+			skippedTools = append(skippedTools, tool.Name)
+		}
+	}
+
+	// Register web scraping tool if supported
+	if searchClient.SupportsOperation(client.OpScrapeWebpage) {
 		mcp.AddTool(server, &mcp.Tool{
-			Name:        toolName,
-			Description: description,
-		}, func(ctx context.Context, req *mcp.CallToolRequest, args metasearch.SearchParams) (*mcp.CallToolResult, any, error) {
-			result, err := searchFunc(ctx, args)
+			Name:        client.OpScrapeWebpage,
+			Description: "Scrape content from a webpage",
+		}, func(ctx context.Context, req *mcp.CallToolRequest, args metasearch.ScrapeParams) (*mcp.CallToolResult, any, error) {
+			result, err := searchClient.ScrapeWebpage(ctx, args)
 			if err != nil {
-				return nil, nil, fmt.Errorf("%s failed: %w", toolName, err)
+				return nil, nil, fmt.Errorf("scraping failed: %w", err)
 			}
 
 			resultJSON, _ := json.MarshalIndent(result.Data, "", "  ")
@@ -45,38 +102,16 @@ func main() {
 				},
 			}, nil, nil
 		})
+		registeredTools = append(registeredTools, client.OpScrapeWebpage)
+	} else {
+		skippedTools = append(skippedTools, client.OpScrapeWebpage)
 	}
 
-	// Register all search tools
-	registerSearchTool("google_search", "Perform a Google web search", searchClient.Search)
-	registerSearchTool("google_search_news", "Search for news articles using Google News", searchClient.SearchNews)
-	registerSearchTool("google_search_images", "Search for images using Google Images", searchClient.SearchImages)
-	registerSearchTool("google_search_videos", "Search for videos using Google Videos", searchClient.SearchVideos)
-	registerSearchTool("google_search_places", "Search for places using Google Places", searchClient.SearchPlaces)
-	registerSearchTool("google_search_maps", "Search for locations using Google Maps", searchClient.SearchMaps)
-	registerSearchTool("google_search_reviews", "Search for reviews", searchClient.SearchReviews)
-	registerSearchTool("google_search_shopping", "Search for products using Google Shopping", searchClient.SearchShopping)
-	registerSearchTool("google_search_scholar", "Search for academic papers using Google Scholar", searchClient.SearchScholar)
-	registerSearchTool("google_search_lens", "Perform visual search using Google Lens", searchClient.SearchLens)
-	registerSearchTool("google_search_autocomplete", "Get search suggestions using Google Autocomplete", searchClient.SearchAutocomplete)
-
-	// Web scraping tool
-	mcp.AddTool(server, &mcp.Tool{
-		Name:        "webpage_scrape",
-		Description: "Scrape content from a webpage",
-	}, func(ctx context.Context, req *mcp.CallToolRequest, args metasearch.ScrapeParams) (*mcp.CallToolResult, any, error) {
-		result, err := searchClient.ScrapeWebpage(ctx, args)
-		if err != nil {
-			return nil, nil, fmt.Errorf("scraping failed: %w", err)
-		}
-
-		resultJSON, _ := json.MarshalIndent(result.Data, "", "  ")
-		return &mcp.CallToolResult{
-			Content: []mcp.Content{
-				&mcp.TextContent{Text: string(resultJSON)},
-			},
-		}, nil, nil
-	})
+	// Log tool registration summary
+	log.Printf("Registered %d tools: %v", len(registeredTools), registeredTools)
+	if len(skippedTools) > 0 {
+		log.Printf("Skipped %d unsupported tools: %v", len(skippedTools), skippedTools)
+	}
 
 	log.Printf("Starting Multi-Search MCP Server with %s engine...", searchClient.GetName())
 	if err := server.Run(context.Background(), &mcp.StdioTransport{}); err != nil {

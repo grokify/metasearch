@@ -8,8 +8,8 @@ import (
 	"os"
 
 	"github.com/grokify/metasearch"
-	"github.com/grokify/metasearch/serpapi"
-	"github.com/grokify/metasearch/serper"
+	"github.com/grokify/metasearch/client/serpapi"
+	"github.com/grokify/metasearch/client/serper"
 )
 
 func main() {

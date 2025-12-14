@@ -81,11 +81,9 @@ func main() {
 	}
 
 	for _, engineName := range c.ListEngines() {
-		eng, err := c.GetEngine(engineName)
-		if err != nil {
+		if err := c.SetEngine(engineName); err != nil {
 			continue
 		}
-		c.SetEngine(engineName)
 
 		fmt.Printf("\n%s:\n", engineName)
 		for _, op := range operations {

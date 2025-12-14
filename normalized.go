@@ -101,15 +101,15 @@ type NewsResult struct {
 
 // ImageResult represents an image search result
 type ImageResult struct {
-	Position   int    `json:"position"`
-	Title      string `json:"title,omitempty"`
-	ImageURL   string `json:"image_url"`
-	Thumbnail  string `json:"thumbnail,omitempty"`
-	Source     string `json:"source,omitempty"`
-	SourceURL  string `json:"source_url,omitempty"`
-	Width      int    `json:"width,omitempty"`
-	Height     int    `json:"height,omitempty"`
-	IsProduct  bool   `json:"is_product,omitempty"`
+	Position  int    `json:"position"`
+	Title     string `json:"title,omitempty"`
+	ImageURL  string `json:"image_url"`
+	Thumbnail string `json:"thumbnail,omitempty"`
+	Source    string `json:"source,omitempty"`
+	SourceURL string `json:"source_url,omitempty"`
+	Width     int    `json:"width,omitempty"`
+	Height    int    `json:"height,omitempty"`
+	IsProduct bool   `json:"is_product,omitempty"`
 }
 
 // VideoResult represents a video search result
@@ -128,22 +128,22 @@ type VideoResult struct {
 
 // PlaceResult represents a local business or place result
 type PlaceResult struct {
-	Position    int               `json:"position"`
-	Title       string            `json:"title"`
-	PlaceID     string            `json:"place_id,omitempty"`
-	DataID      string            `json:"data_id,omitempty"`
-	Address     string            `json:"address,omitempty"`
-	Phone       string            `json:"phone,omitempty"`
-	Website     string            `json:"website,omitempty"`
-	Rating      float64           `json:"rating,omitempty"`
-	Reviews     int               `json:"reviews,omitempty"`
-	Type        string            `json:"type,omitempty"`
-	Hours       string            `json:"hours,omitempty"`
-	Price       string            `json:"price,omitempty"`
-	Latitude    float64           `json:"latitude,omitempty"`
-	Longitude   float64           `json:"longitude,omitempty"`
-	Thumbnail   string            `json:"thumbnail,omitempty"`
-	Attributes  map[string]string `json:"attributes,omitempty"`
+	Position   int               `json:"position"`
+	Title      string            `json:"title"`
+	PlaceID    string            `json:"place_id,omitempty"`
+	DataID     string            `json:"data_id,omitempty"`
+	Address    string            `json:"address,omitempty"`
+	Phone      string            `json:"phone,omitempty"`
+	Website    string            `json:"website,omitempty"`
+	Rating     float64           `json:"rating,omitempty"`
+	Reviews    int               `json:"reviews,omitempty"`
+	Type       string            `json:"type,omitempty"`
+	Hours      string            `json:"hours,omitempty"`
+	Price      string            `json:"price,omitempty"`
+	Latitude   float64           `json:"latitude,omitempty"`
+	Longitude  float64           `json:"longitude,omitempty"`
+	Thumbnail  string            `json:"thumbnail,omitempty"`
+	Attributes map[string]string `json:"attributes,omitempty"`
 }
 
 // ShoppingResult represents a shopping/product result
@@ -180,11 +180,11 @@ type ScholarResult struct {
 
 // SearchMetadata contains metadata about the search itself
 type SearchMetadata struct {
-	Engine     string  `json:"engine"`      // "serper", "serpapi", etc.
-	Query      string  `json:"query"`
-	Location   string  `json:"location,omitempty"`
-	Language   string  `json:"language,omitempty"`
-	Country    string  `json:"country,omitempty"`
-	TotalResults int64 `json:"total_results,omitempty"`
-	TimeTaken  float64 `json:"time_taken,omitempty"` // seconds
+	Engine       string  `json:"engine"` // "serper", "serpapi", etc.
+	Query        string  `json:"query"`
+	Location     string  `json:"location,omitempty"`
+	Language     string  `json:"language,omitempty"`
+	Country      string  `json:"country,omitempty"`
+	TotalResults int64   `json:"total_results,omitempty"`
+	TimeTaken    float64 `json:"time_taken,omitempty"` // seconds
 }

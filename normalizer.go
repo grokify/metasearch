@@ -343,29 +343,3 @@ func getString(m map[string]any, key string) string {
 	}
 	return ""
 }
-
-// Helper function to safely extract int values from maps
-func getInt(m map[string]any, key string) int {
-	if val, ok := m[key]; ok {
-		switch v := val.(type) {
-		case int:
-			return v
-		case float64:
-			return int(v)
-		}
-	}
-	return 0
-}
-
-// Helper function to safely extract float64 values from maps
-func getFloat64(m map[string]any, key string) float64 {
-	if val, ok := m[key]; ok {
-		switch v := val.(type) {
-		case float64:
-			return v
-		case int:
-			return float64(v)
-		}
-	}
-	return 0
-}

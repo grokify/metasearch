@@ -13,18 +13,18 @@ import (
 
 // Operation names that map to Engine interface methods
 const (
-	OpSearch            = "google_search"
-	OpSearchNews        = "google_search_news"
-	OpSearchImages      = "google_search_images"
-	OpSearchVideos      = "google_search_videos"
-	OpSearchPlaces      = "google_search_places"
-	OpSearchMaps        = "google_search_maps"
-	OpSearchReviews     = "google_search_reviews"
-	OpSearchShopping    = "google_search_shopping"
-	OpSearchScholar     = "google_search_scholar"
-	OpSearchLens        = "google_search_lens"
+	OpSearch             = "google_search"
+	OpSearchNews         = "google_search_news"
+	OpSearchImages       = "google_search_images"
+	OpSearchVideos       = "google_search_videos"
+	OpSearchPlaces       = "google_search_places"
+	OpSearchMaps         = "google_search_maps"
+	OpSearchReviews      = "google_search_reviews"
+	OpSearchShopping     = "google_search_shopping"
+	OpSearchScholar      = "google_search_scholar"
+	OpSearchLens         = "google_search_lens"
 	OpSearchAutocomplete = "google_search_autocomplete"
-	OpScrapeWebpage     = "webpage_scrape"
+	OpScrapeWebpage      = "webpage_scrape"
 )
 
 // ErrOperationNotSupported is returned when an operation is not supported by the current engine

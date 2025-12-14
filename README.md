@@ -18,15 +18,18 @@ The `metasearch` package provides:
 - **Multiple Providers**: Built-in support for Serper and SerpAPI
 - **Type Safety**: Structured parameter and result types
 - **Registry System**: Automatic discovery and management of engines
+- **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcpserver`)
 
-## CLI Usage
+## Applications
 
-### Installation
+### CLI Tool
+
+#### Installation
 ```bash
 go build ./cmd/metasearch
 ```
 
-### Basic Usage
+#### Basic Usage
 ```bash
 # Set API key
 export SERPER_API_KEY="your_api_key"
@@ -43,6 +46,55 @@ export SEARCH_ENGINE="serpapi"
 ./metasearch "golang programming"
 ```
 
+### MCP Server
+
+The Model Context Protocol (MCP) server enables AI assistants to perform web searches through this package.
+
+#### Installation
+```bash
+go install github.com/grokify/metasearch/cmd/mcpserver@latest
+```
+
+Or build from source:
+```bash
+go build ./cmd/mcpserver
+```
+
+#### Configuration
+
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+
+```json
+{
+  "mcpServers": {
+    "metasearch": {
+      "command": "mcpserver",
+      "env": {
+        "SERPER_API_KEY": "your_serper_api_key",
+        "SEARCH_ENGINE": "serper"
+      }
+    }
+  }
+}
+```
+
+#### Features
+
+The MCP server provides tools for:
+- **Web Search**: General web searches with customizable parameters
+- **News Search**: Search news articles
+- **Image Search**: Search for images
+- **Video Search**: Search for videos
+- **Places Search**: Search for locations and businesses
+- **Maps Search**: Search maps data
+- **Reviews Search**: Search reviews
+- **Shopping Search**: Search shopping/product listings
+- **Scholar Search**: Search academic papers
+- **Lens Search**: Visual search capabilities
+- **Autocomplete**: Get search suggestions
+
+All searches support parameters like location, language, country, and number of results.
+
 ## Library Usage
 
 ```go
@@ -51,10 +103,10 @@ package main
 import (
     "context"
     "log"
-    
+
     "github.com/grokify/metasearch"
-    "github.com/grokify/metasearch/serper"
-    "github.com/grokify/metasearch/serpapi"
+    "github.com/grokify/metasearch/client/serper"
+    "github.com/grokify/metasearch/client/serpapi"
 )
 
 func main() {
@@ -98,13 +150,13 @@ func main() {
 ## Supported Engines
 
 ### Serper
-- **Package**: `metasearch/serper`
+- **Package**: `github.com/grokify/metasearch/client/serper`
 - **Environment Variable**: `SERPER_API_KEY`
 - **Website**: [serper.dev](https://serper.dev)
 - **All search types supported**
 
 ### SerpAPI
-- **Package**: `metasearch/serpapi`
+- **Package**: `github.com/grokify/metasearch/client/serpapi`
 - **Environment Variable**: `SERPAPI_API_KEY`
 - **Website**: [serpapi.com](https://serpapi.com)
 - **Most search types supported**
@@ -170,6 +222,11 @@ type SearchResult struct {
 
 ### Basic Registry Operations
 ```go
+import (
+    "github.com/grokify/metasearch"
+    "github.com/grokify/metasearch/client/serper"
+)
+
 // Create new registry and register engines
 registry := metasearch.NewRegistry()
 
@@ -219,9 +276,9 @@ export SERPAPI_API_KEY="your_serpapi_key"
 
 To add a new search engine:
 
-1. **Create engine package**:
+1. **Create engine package under `client/`**:
 ```go
-// metasearch/newengine/newengine.go
+// client/newengine/newengine.go
 package newengine
 
 import (
@@ -258,21 +315,25 @@ func (e *Engine) Search(ctx context.Context, params metasearch.SearchParams) (*m
 2. **Register in your application**:
 ```go
 // In your application code (e.g., cmd/yourapp/main.go)
-import "github.com/grokify/metasearch/newengine"
+import (
+    "github.com/grokify/metasearch"
+    "github.com/grokify/metasearch/client/newengine"
+    "github.com/grokify/metasearch/client/serper"
+)
 
 func createRegistry() *metasearch.Registry {
     registry := metasearch.NewRegistry()
-    
+
     // Register existing engines
     if serperEngine, err := serper.New(); err == nil {
         registry.Register(serperEngine)
     }
-    
+
     // Register new engine
     if newEng, err := newengine.New(); err == nil {
         registry.Register(newEng)
     }
-    
+
     return registry
 }
 ```

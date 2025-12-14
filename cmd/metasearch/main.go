@@ -5,36 +5,31 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
+
+	flags "github.com/jessevdk/go-flags"
 
 	"github.com/grokify/metasearch"
 	"github.com/grokify/metasearch/client"
 )
 
+type Options struct {
+	Engine string `short:"e" long:"engine" description:"Search engine (serper, serpapi)" required:"true"`
+	Query  string `short:"q" long:"query" description:"Query" required:"true"`
+}
+
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: metasearch <query> [engine]")
-		fmt.Println("Available engines: serper, serpapi")
-		fmt.Println("Set SEARCH_ENGINE environment variable to specify default engine")
-		os.Exit(1)
+	opts := Options{}
+	_, err := flags.Parse(&opts)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	query := os.Args[1]
-	var engineName string
-	if len(os.Args) > 2 {
-		engineName = os.Args[2]
-	}
+	query := opts.Query
 
 	// Create client SDK
 	var c *client.Client
-	var err error
 
-	if engineName != "" {
-		c, err = client.NewWithEngine(engineName)
-	} else {
-		c, err = client.New()
-	}
-
+	c, err = client.NewWithEngine(opts.Engine)
 	if err != nil {
 		log.Fatalf("Failed to initialize client: %v", err)
 	}

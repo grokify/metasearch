@@ -22,7 +22,7 @@ The `metaserp` package provides:
 - **Type Safety**: Structured parameter and result types
 - **Registry System**: Automatic discovery and management of engines
 - **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcpserver`)
-- **CLI Tool**: Command-line interface for quick searches (`cmd/metasearch`)
+- **CLI Tool**: Command-line interface for quick searches (`cmd/metaserp`)
 
 ## Quick Start
 
@@ -49,7 +49,7 @@ func main() {
     }
 
     // Perform a search
-    result, err := c.Search(context.Background(), metasearch.SearchParams{
+    result, err := c.Search(context.Background(), metaserp.SearchParams{
         Query: "golang programming",
     })
     if err != nil {
@@ -63,13 +63,13 @@ func main() {
 ## Project Structure
 
 ```
-metasearch/
+metaserp/
 ├── client/              # Search engine client implementations
 │   ├── client.go        # Unified Client SDK with capability checking
 │   ├── serper/          # Serper.dev implementation
 │   └── serpapi/         # SerpAPI implementation
 ├── cmd/                 # Executable applications
-│   ├── metasearch/      # CLI tool
+│   ├── metaserp/      # CLI tool
 │   └── mcpserver/       # MCP server for AI integration
 ├── examples/            # Example programs
 │   ├── capability_check/   # Capability checking demo
@@ -77,7 +77,7 @@ metasearch/
 ├── types.go             # Core types and Engine interface
 ├── normalized.go        # Normalized response types
 ├── normalizer.go        # Response normalizer
-├── metasearch.go        # Utility functions
+├── metaserp.go        # Utility functions
 └── README.md
 ```
 
@@ -87,7 +87,7 @@ metasearch/
 
 #### Installation
 ```bash
-go build ./cmd/metasearch
+go build ./cmd/metaserp
 ```
 
 #### Basic Usage
@@ -96,14 +96,14 @@ go build ./cmd/metasearch
 export SERPER_API_KEY="your_api_key"
 
 # Basic search (specify engine and query)
-./metasearch -e serper -q "golang programming"
+./metaserp -e serper -q "golang programming"
 
 # Or use long flags
-./metasearch --engine serpapi --query "golang programming"
+./metaserp --engine serpapi --query "golang programming"
 
 # With SerpAPI
 export SERPAPI_API_KEY="your_api_key"
-./metasearch -e serpapi -q "golang programming"
+./metaserp -e serpapi -q "golang programming"
 ```
 
 ### MCP Server
@@ -127,7 +127,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 ```json
 {
   "mcpServers": {
-    "metasearch": {
+    "metaserp": {
       "command": "mcpserver",
       "env": {
         "SERPER_API_KEY": "your_serper_api_key",
@@ -296,7 +296,7 @@ func main() {
     log.Printf("Using engine: %s v%s", c.GetName(), c.GetVersion())
 
     // Perform a search
-    result, err := c.Search(context.Background(), metasearch.SearchParams{
+    result, err := c.Search(context.Background(), metaserp.SearchParams{
         Query:      "golang programming",
         NumResults: 10,
         Language:   "en",
@@ -359,7 +359,7 @@ import (
 
 func main() {
     // Create registry and manually register engines
-    registry := metasearch.NewRegistry()
+    registry := metaserp.NewRegistry()
 
     // Register engines (handle errors as needed)
     if serperEngine, err := serper.New(); err == nil {
@@ -370,13 +370,13 @@ func main() {
     }
 
     // Get default engine (based on SEARCH_ENGINE env var)
-    engine, err := metasearch.GetDefaultEngine(registry)
+    engine, err := metaserp.GetDefaultEngine(registry)
     if err != nil {
         log.Printf("Warning: %v", err)
     }
 
     // Perform a search
-    result, err := engine.Search(context.Background(), metasearch.SearchParams{
+    result, err := engine.Search(context.Background(), metaserp.SearchParams{
         Query: "golang programming",
     })
     // ...
@@ -480,7 +480,7 @@ import (
 )
 
 // Create new registry and register engines
-registry := metasearch.NewRegistry()
+registry := metaserp.NewRegistry()
 
 // Register engines manually
 if serperEngine, err := serper.New(); err == nil {
@@ -504,11 +504,11 @@ allEngines := registry.GetAll()
 ```go
 // Get info about specific engine
 engine, _ := registry.Get("serper")
-info := metasearch.GetEngineInfo(engine)
+info := metaserp.GetEngineInfo(engine)
 log.Printf("Engine: %s v%s, Tools: %v", info.Name, info.Version, info.SupportedTools)
 
 // Get info about all engines
-allInfo := metasearch.GetAllEngineInfo(registry)
+allInfo := metaserp.GetAllEngineInfo(registry)
 ```
 
 ## Environment Configuration
@@ -557,8 +557,8 @@ func (e *Engine) GetName() string { return "newengine" }
 func (e *Engine) GetVersion() string { return "1.0.0" }
 func (e *Engine) GetSupportedTools() []string { /* return supported tools */ }
 
-// Implement all other metasearch.Engine methods...
-func (e *Engine) Search(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+// Implement all other metaserp.Engine methods...
+func (e *Engine) Search(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
     // Implementation
 }
 // ... implement all other interface methods
@@ -573,8 +573,8 @@ import (
     "github.com/grokify/metaserp/client/serper"
 )
 
-func createRegistry() *metasearch.Registry {
-    registry := metasearch.NewRegistry()
+func createRegistry() *metaserp.Registry {
+    registry := metaserp.NewRegistry()
 
     // Register existing engines
     if serperEngine, err := serper.New(); err == nil {
@@ -591,14 +591,14 @@ func createRegistry() *metasearch.Registry {
 ```
 
 3. **Update CLI (optional)**:
-   Add the new engine import and registration to `cmd/metasearch/main.go`
+   Add the new engine import and registration to `cmd/metaserp/main.go`
 
 ## Error Handling
 
 The package provides consistent error handling:
 
 ```go
-engine, err := metasearch.GetDefaultEngine(registry)
+engine, err := metaserp.GetDefaultEngine(registry)
 if err != nil {
     // Handle engine selection error
     log.Printf("Engine selection warning: %v", err)
@@ -657,8 +657,8 @@ The registry is safe for concurrent read operations. Engine implementations shou
  [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/metaserp
  [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/metaserp
  [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
- [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=grokify%2Fmetasearch
- [loc-svg]: https://tokei.rs/b1/github/grokify/metasearch
+ [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=grokify%2Fmetaserp
+ [loc-svg]: https://tokei.rs/b1/github/grokify/metaserp
  [repo-url]: https://github.com/grokify/metaserp
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
  [license-url]: https://github.com/grokify/metaserp/blob/master/LICENSE

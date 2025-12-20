@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"os"
 
-	metasearch "github.com/grokify/metaserp"
+	"github.com/grokify/metaserp"
 )
 
 const (
@@ -19,7 +19,7 @@ const (
 	searchURL     = "https://serpapi.com/search.json"
 )
 
-// Engine implements the metasearch.Engine interface for SerpAPI
+// Engine implements the metaserp.Engine interface for SerpAPI
 type Engine struct {
 	apiKey string
 	client *http.Client
@@ -67,7 +67,7 @@ func (e *Engine) GetSupportedTools() []string {
 }
 
 // makeRequest performs HTTP request to SerpAPI
-func (e *Engine) makeRequest(params map[string]string) (*metasearch.SearchResult, error) {
+func (e *Engine) makeRequest(params map[string]string) (*metaserp.SearchResult, error) {
 	// Build URL with query parameters
 	reqURL, err := url.Parse(searchURL)
 	if err != nil {
@@ -107,14 +107,14 @@ func (e *Engine) makeRequest(params map[string]string) (*metasearch.SearchResult
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	return &metasearch.SearchResult{
+	return &metaserp.SearchResult{
 		Data: result,
 		Raw:  string(body),
 	}, nil
 }
 
 // buildParams converts SearchParams to SerpAPI parameters
-func (e *Engine) buildParams(params metasearch.SearchParams, engine string) map[string]string {
+func (e *Engine) buildParams(params metaserp.SearchParams, engine string) map[string]string {
 	apiParams := map[string]string{
 		"q":      params.Query,
 		"engine": engine,
@@ -137,27 +137,27 @@ func (e *Engine) buildParams(params metasearch.SearchParams, engine string) map[
 }
 
 // Search performs a general web search
-func (e *Engine) Search(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) Search(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	return e.makeRequest(e.buildParams(params, "google"))
 }
 
 // SearchNews performs a news search
-func (e *Engine) SearchNews(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchNews(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	return e.makeRequest(e.buildParams(params, "google_news"))
 }
 
 // SearchImages performs an image search
-func (e *Engine) SearchImages(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchImages(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	return e.makeRequest(e.buildParams(params, "google_images"))
 }
 
 // SearchVideos performs a video search
-func (e *Engine) SearchVideos(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchVideos(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	return e.makeRequest(e.buildParams(params, "google_videos"))
 }
 
 // SearchPlaces performs a places search
-func (e *Engine) SearchPlaces(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchPlaces(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	// For places, we use Google Maps search with type parameter
 	apiParams := e.buildParams(params, "google_maps")
 	apiParams["type"] = "search"
@@ -165,12 +165,12 @@ func (e *Engine) SearchPlaces(ctx context.Context, params metasearch.SearchParam
 }
 
 // SearchMaps performs a maps search
-func (e *Engine) SearchMaps(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchMaps(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	return e.makeRequest(e.buildParams(params, "google_maps"))
 }
 
 // SearchReviews performs a reviews search
-func (e *Engine) SearchReviews(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchReviews(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	// Reviews can be searched through Google with specific query modification
 	apiParams := e.buildParams(params, "google")
 	apiParams["q"] = params.Query + " reviews"
@@ -178,12 +178,12 @@ func (e *Engine) SearchReviews(ctx context.Context, params metasearch.SearchPara
 }
 
 // SearchShopping performs a shopping search
-func (e *Engine) SearchShopping(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchShopping(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	return e.makeRequest(e.buildParams(params, "google_shopping"))
 }
 
 // SearchScholar performs a scholar search
-func (e *Engine) SearchScholar(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchScholar(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	apiParams := map[string]string{
 		"q":      params.Query,
 		"engine": "google_scholar",
@@ -200,12 +200,12 @@ func (e *Engine) SearchScholar(ctx context.Context, params metasearch.SearchPara
 }
 
 // SearchLens performs a visual search (not supported by SerpAPI)
-func (e *Engine) SearchLens(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchLens(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	return nil, fmt.Errorf("google_search_lens is not supported by SerpAPI")
 }
 
 // SearchAutocomplete gets search suggestions
-func (e *Engine) SearchAutocomplete(ctx context.Context, params metasearch.SearchParams) (*metasearch.SearchResult, error) {
+func (e *Engine) SearchAutocomplete(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
 	apiParams := map[string]string{
 		"q":      params.Query,
 		"engine": "google_autocomplete",
@@ -222,7 +222,7 @@ func (e *Engine) SearchAutocomplete(ctx context.Context, params metasearch.Searc
 }
 
 // ScrapeWebpage scrapes content from a webpage (using SerpAPI's custom scraping)
-func (e *Engine) ScrapeWebpage(ctx context.Context, params metasearch.ScrapeParams) (*metasearch.SearchResult, error) {
+func (e *Engine) ScrapeWebpage(ctx context.Context, params metaserp.ScrapeParams) (*metaserp.SearchResult, error) {
 	// Validate URL
 	if _, err := url.Parse(params.URL); err != nil {
 		return nil, fmt.Errorf("invalid URL: %w", err)
@@ -260,7 +260,7 @@ func (e *Engine) ScrapeWebpage(ctx context.Context, params metasearch.ScrapePara
 		"headers": resp.Header,
 	}
 
-	return &metasearch.SearchResult{
+	return &metaserp.SearchResult{
 		Data: result,
 		Raw:  string(body),
 	}, nil

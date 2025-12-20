@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/grokify/metasearch"
+	"github.com/grokify/metaserp"
 )
 
 // TestCapabilityChecking tests that the client properly validates operation support
@@ -26,7 +26,7 @@ func TestCapabilityChecking(t *testing.T) {
 		}
 
 		// This should NOT return ErrOperationNotSupported with Serper
-		_, err = c.SearchLens(context.Background(), metasearch.SearchParams{Query: "test"})
+		_, err = c.SearchLens(context.Background(), metaserp.SearchParams{Query: "test"})
 		if errors.Is(err, ErrOperationNotSupported) {
 			t.Error("Serper should support SearchLens but got unsupported error")
 		}
@@ -45,7 +45,7 @@ func TestCapabilityChecking(t *testing.T) {
 		}
 
 		// This should return ErrOperationNotSupported with SerpAPI
-		_, err = c.SearchLens(context.Background(), metasearch.SearchParams{Query: "test"})
+		_, err = c.SearchLens(context.Background(), metaserp.SearchParams{Query: "test"})
 		if !errors.Is(err, ErrOperationNotSupported) {
 			t.Errorf("Expected ErrOperationNotSupported, got: %v", err)
 		}
@@ -76,7 +76,7 @@ func TestActualSearchWithSerper(t *testing.T) {
 	}
 
 	t.Run("Basic web search", func(t *testing.T) {
-		result, err := c.Search(context.Background(), metasearch.SearchParams{
+		result, err := c.Search(context.Background(), metaserp.SearchParams{
 			Query:      "golang programming",
 			NumResults: 5,
 		})
@@ -97,7 +97,7 @@ func TestActualSearchWithSerper(t *testing.T) {
 			t.Fatal("Serper should support Lens")
 		}
 
-		result, err := c.SearchLens(context.Background(), metasearch.SearchParams{
+		result, err := c.SearchLens(context.Background(), metaserp.SearchParams{
 			Query:      "red apple",
 			NumResults: 5,
 		})
@@ -125,7 +125,7 @@ func TestActualSearchWithSerpAPI(t *testing.T) {
 	}
 
 	t.Run("Basic web search", func(t *testing.T) {
-		result, err := c.Search(context.Background(), metasearch.SearchParams{
+		result, err := c.Search(context.Background(), metaserp.SearchParams{
 			Query:      "golang programming",
 			NumResults: 5,
 		})
@@ -146,7 +146,7 @@ func TestActualSearchWithSerpAPI(t *testing.T) {
 			t.Fatal("SerpAPI should NOT support Lens")
 		}
 
-		_, err := c.SearchLens(context.Background(), metasearch.SearchParams{
+		_, err := c.SearchLens(context.Background(), metaserp.SearchParams{
 			Query: "red apple",
 		})
 		if !errors.Is(err, ErrOperationNotSupported) {

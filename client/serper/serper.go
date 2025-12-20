@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/grokify/metasearch"
+	metasearch "github.com/grokify/metaserp"
 )
 
 const (

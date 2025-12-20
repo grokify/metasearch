@@ -8,8 +8,8 @@ import (
 
 	flags "github.com/jessevdk/go-flags"
 
-	"github.com/grokify/metasearch"
-	"github.com/grokify/metasearch/client"
+	"github.com/grokify/metaserp"
+	"github.com/grokify/metaserp/client"
 )
 
 type Options struct {
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	// Perform search
-	params := metasearch.SearchParams{
+	params := metaserp.SearchParams{
 		Query:      query,
 		NumResults: 10,
 	}

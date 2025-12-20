@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/grokify/metasearch"
+	metasearch "github.com/grokify/metaserp"
 )
 
 const (

@@ -1,4 +1,4 @@
-# Metasearch Multi-Search Client and MCP Server
+# Metaserp Multi-Search Client and MCP Server
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Lint Status][lint-status-svg]][lint-status-url]
@@ -11,7 +11,7 @@ A modular, plugin-based search engine abstraction package for Go that provides a
 
 ## Overview
 
-The `metasearch` package provides:
+The `metaserp` package provides:
 
 - **Unified Client SDK**: Single API that fronts multiple search engine backends (`client/client.go`)
 - **Normalized Responses**: Optional unified response structures across all engines (engine-agnostic)
@@ -34,8 +34,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/grokify/metasearch"
-    "github.com/grokify/metasearch/client"
+    "github.com/grokify/metaserp"
+    "github.com/grokify/metaserp/client"
 )
 
 func main() {
@@ -112,7 +112,7 @@ The Model Context Protocol (MCP) server enables AI assistants to perform web sea
 
 #### Installation
 ```bash
-go install github.com/grokify/metasearch/cmd/mcpserver@latest
+go install github.com/grokify/metaserp/cmd/mcpserver@latest
 ```
 
 Or build from source:
@@ -184,7 +184,7 @@ The `client` package provides a high-level SDK that simplifies working with mult
 ### Quick Start
 
 ```go
-import "github.com/grokify/metasearch/client"
+import "github.com/grokify/metaserp/client"
 
 // Create client - auto-selects engine based on SEARCH_ENGINE env var
 c, err := client.New()
@@ -282,8 +282,8 @@ import (
     "context"
     "log"
 
-    "github.com/grokify/metasearch"
-    "github.com/grokify/metasearch/client"
+    "github.com/grokify/metaserp"
+    "github.com/grokify/metaserp/client"
 )
 
 func main() {
@@ -352,9 +352,9 @@ For direct registry access:
 
 ```go
 import (
-    "github.com/grokify/metasearch"
-    "github.com/grokify/metasearch/client/serper"
-    "github.com/grokify/metasearch/client/serpapi"
+    "github.com/grokify/metaserp"
+    "github.com/grokify/metaserp/client/serper"
+    "github.com/grokify/metaserp/client/serpapi"
 )
 
 func main() {
@@ -386,13 +386,13 @@ func main() {
 ## Supported Engines
 
 ### Serper
-- **Package**: `github.com/grokify/metasearch/client/serper`
+- **Package**: `github.com/grokify/metaserp/client/serper`
 - **Environment Variable**: `SERPER_API_KEY`
 - **Website**: [serper.dev](https://serper.dev)
 - **Supported Operations**: All search types including Lens
 
 ### SerpAPI
-- **Package**: `github.com/grokify/metasearch/client/serpapi`
+- **Package**: `github.com/grokify/metaserp/client/serpapi`
 - **Environment Variable**: `SERPAPI_API_KEY`
 - **Website**: [serpapi.com](https://serpapi.com)
 - **Supported Operations**: All search types except Lens
@@ -475,8 +475,8 @@ type SearchResult struct {
 ### Basic Registry Operations
 ```go
 import (
-    "github.com/grokify/metasearch"
-    "github.com/grokify/metasearch/client/serper"
+    "github.com/grokify/metaserp"
+    "github.com/grokify/metaserp/client/serper"
 )
 
 // Create new registry and register engines
@@ -537,7 +537,7 @@ import (
     "context"
     "fmt"
     "os"
-    "github.com/grokify/metasearch"
+    "github.com/grokify/metaserp"
 )
 
 type Engine struct {
@@ -568,9 +568,9 @@ func (e *Engine) Search(ctx context.Context, params metasearch.SearchParams) (*m
 ```go
 // In your application code (e.g., cmd/yourapp/main.go)
 import (
-    "github.com/grokify/metasearch"
-    "github.com/grokify/metasearch/client/newengine"
-    "github.com/grokify/metasearch/client/serper"
+    "github.com/grokify/metaserp"
+    "github.com/grokify/metaserp/client/newengine"
+    "github.com/grokify/metaserp/client/serper"
 )
 
 func createRegistry() *metasearch.Registry {
@@ -648,17 +648,17 @@ go test -v ./client
 
 The registry is safe for concurrent read operations. Engine implementations should be thread-safe for concurrent use.
 
- [build-status-svg]: https://github.com/grokify/metasearch/actions/workflows/ci.yaml/badge.svg?branch=main
- [build-status-url]: https://github.com/grokify/metasearch/actions/workflows/ci.yaml
- [lint-status-svg]: https://github.com/grokify/metasearch/actions/workflows/lint.yaml/badge.svg?branch=main
- [lint-status-url]: https://github.com/grokify/metasearch/actions/workflows/lint.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/metasearch
- [goreport-url]: https://goreportcard.com/report/github.com/grokify/metasearch
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/metasearch
- [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/metasearch
+ [build-status-svg]: https://github.com/grokify/metaserp/actions/workflows/ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/grokify/metaserp/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/grokify/metaserp/actions/workflows/lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/grokify/metaserp/actions/workflows/lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/metaserp
+ [goreport-url]: https://goreportcard.com/report/github.com/grokify/metaserp
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/metaserp
+ [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/metaserp
  [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
  [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=grokify%2Fmetasearch
  [loc-svg]: https://tokei.rs/b1/github/grokify/metasearch
- [repo-url]: https://github.com/grokify/metasearch
+ [repo-url]: https://github.com/grokify/metaserp
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/grokify/metasearch/blob/master/LICENSE
+ [license-url]: https://github.com/grokify/metaserp/blob/master/LICENSE

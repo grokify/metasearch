@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/grokify/metasearch"
-	"github.com/grokify/metasearch/client"
+	"github.com/grokify/metaserp"
+	"github.com/grokify/metaserp/client"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
 
 	// Demonstrate both raw and normalized responses
 	fmt.Println("=== Raw Response (Engine-Specific) ===")
-	rawResult, err := c.Search(context.Background(), metasearch.SearchParams{
+	rawResult, err := c.Search(context.Background(), metaserp.SearchParams{
 		Query:      query,
 		NumResults: 3,
 	})
@@ -42,7 +42,7 @@ func main() {
 
 	// Now get normalized response
 	fmt.Println("=== Normalized Response (Engine-Agnostic) ===")
-	normalized, err := c.SearchNormalized(context.Background(), metasearch.SearchParams{
+	normalized, err := c.SearchNormalized(context.Background(), metaserp.SearchParams{
 		Query:      query,
 		NumResults: 3,
 	})
@@ -106,7 +106,7 @@ func main() {
 		}
 
 		// Same normalized API works with different engine!
-		result, err := c.SearchNormalized(context.Background(), metasearch.SearchParams{
+		result, err := c.SearchNormalized(context.Background(), metaserp.SearchParams{
 			Query:      query,
 			NumResults: 2,
 		})

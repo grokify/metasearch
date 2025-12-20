@@ -1,4 +1,4 @@
-module github.com/grokify/metasearch
+module github.com/grokify/metaserp
 
 go 1.24.5
 

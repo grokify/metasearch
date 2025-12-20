@@ -1,4 +1,4 @@
-package metasearch
+package metaserp
 
 import (
 	"testing"

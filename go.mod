@@ -4,7 +4,7 @@ go 1.24.5
 
 require (
 	github.com/jessevdk/go-flags v1.6.1
-	github.com/modelcontextprotocol/go-sdk v1.1.0
+	github.com/modelcontextprotocol/go-sdk v1.2.0
 )
 
 require (

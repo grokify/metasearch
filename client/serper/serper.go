@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/grokify/metaserp"
+	"github.com/agentplexus/omniserp"
 )
 
 const (
@@ -19,7 +19,7 @@ const (
 	engineVersion = "1.0.0"
 )
 
-// Engine implements the metaserp.Engine interface for Serper API
+// Engine implements the omniserp.Engine interface for Serper API
 type Engine struct {
 	apiKey string
 	client *http.Client
@@ -67,7 +67,7 @@ func (e *Engine) GetSupportedTools() []string {
 }
 
 // makeRequest performs HTTP request to Serper API
-func (e *Engine) makeRequest(endpoint string, params map[string]interface{}) (*metaserp.SearchResult, error) {
+func (e *Engine) makeRequest(endpoint string, params map[string]interface{}) (*omniserp.SearchResult, error) {
 	data, err := json.Marshal(params)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
@@ -101,14 +101,14 @@ func (e *Engine) makeRequest(endpoint string, params map[string]interface{}) (*m
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
 
-	return &metaserp.SearchResult{
+	return &omniserp.SearchResult{
 		Data: result,
 		Raw:  string(body),
 	}, nil
 }
 
 // buildParams converts SearchParams to API parameters
-func (e *Engine) buildParams(params metaserp.SearchParams) map[string]any {
+func (e *Engine) buildParams(params omniserp.SearchParams) map[string]any {
 	apiParams := map[string]any{
 		"q": params.Query,
 	}
@@ -130,47 +130,47 @@ func (e *Engine) buildParams(params metaserp.SearchParams) map[string]any {
 }
 
 // Search performs a general web search
-func (e *Engine) Search(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) Search(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/search", e.buildParams(params))
 }
 
 // SearchNews performs a news search
-func (e *Engine) SearchNews(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchNews(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/news", e.buildParams(params))
 }
 
 // SearchImages performs an image search
-func (e *Engine) SearchImages(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchImages(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/images", e.buildParams(params))
 }
 
 // SearchVideos performs a video search
-func (e *Engine) SearchVideos(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchVideos(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/videos", e.buildParams(params))
 }
 
 // SearchPlaces performs a places search
-func (e *Engine) SearchPlaces(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchPlaces(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/places", e.buildParams(params))
 }
 
 // SearchMaps performs a maps search
-func (e *Engine) SearchMaps(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchMaps(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/maps", e.buildParams(params))
 }
 
 // SearchReviews performs a reviews search
-func (e *Engine) SearchReviews(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchReviews(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/reviews", e.buildParams(params))
 }
 
 // SearchShopping performs a shopping search
-func (e *Engine) SearchShopping(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchShopping(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	return e.makeRequest("/shopping", e.buildParams(params))
 }
 
 // SearchScholar performs a scholar search
-func (e *Engine) SearchScholar(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchScholar(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	// Scholar search has different parameter requirements
 	apiParams := map[string]interface{}{
 		"q": params.Query,
@@ -186,7 +186,7 @@ func (e *Engine) SearchScholar(ctx context.Context, params metaserp.SearchParams
 }
 
 // SearchLens performs a visual search
-func (e *Engine) SearchLens(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchLens(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	// Lens search has limited parameters
 	apiParams := map[string]interface{}{
 		"q": params.Query,
@@ -205,7 +205,7 @@ func (e *Engine) SearchLens(ctx context.Context, params metaserp.SearchParams) (
 }
 
 // SearchAutocomplete gets search suggestions
-func (e *Engine) SearchAutocomplete(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (e *Engine) SearchAutocomplete(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	// Autocomplete has limited parameters
 	apiParams := map[string]interface{}{
 		"q": params.Query,
@@ -221,7 +221,7 @@ func (e *Engine) SearchAutocomplete(ctx context.Context, params metaserp.SearchP
 }
 
 // ScrapeWebpage scrapes content from a webpage
-func (e *Engine) ScrapeWebpage(ctx context.Context, params metaserp.ScrapeParams) (*metaserp.SearchResult, error) {
+func (e *Engine) ScrapeWebpage(ctx context.Context, params omniserp.ScrapeParams) (*omniserp.SearchResult, error) {
 	// Validate URL
 	if _, err := url.Parse(params.URL); err != nil {
 		return nil, fmt.Errorf("invalid URL: %w", err)

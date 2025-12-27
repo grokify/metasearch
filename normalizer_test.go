@@ -1,4 +1,4 @@
-package metaserp
+package omniserp
 
 import (
 	"testing"

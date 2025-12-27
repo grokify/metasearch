@@ -1,4 +1,4 @@
-package metaserp
+package omniserp
 
 // NormalizedSearchResult represents a unified search result structure across all engines
 type NormalizedSearchResult struct {

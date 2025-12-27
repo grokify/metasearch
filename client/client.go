@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/grokify/metaserp"
-	"github.com/grokify/metaserp/client/serpapi"
-	"github.com/grokify/metaserp/client/serper"
+	"github.com/agentplexus/omniserp"
+	"github.com/agentplexus/omniserp/client/serpapi"
+	"github.com/agentplexus/omniserp/client/serper"
 )
 
 // Operation names that map to Engine interface methods
@@ -32,8 +32,8 @@ var ErrOperationNotSupported = errors.New("operation not supported by current en
 
 // Client is a unified SDK that fronts multiple search engine backends
 type Client struct {
-	registry *metaserp.Registry
-	engine   metaserp.Engine
+	registry *omniserp.Registry
+	engine   omniserp.Engine
 }
 
 // New creates a new client with all available engines auto-registered
@@ -65,7 +65,7 @@ func NewWithOptions(opts *Options) (*Client, error) {
 		opts = &Options{}
 	}
 
-	registry := metaserp.NewRegistry()
+	registry := omniserp.NewRegistry()
 
 	// Register all available engines
 	if serperEngine, err := serper.New(); err == nil {
@@ -95,7 +95,7 @@ func NewWithOptions(opts *Options) (*Client, error) {
 	}
 
 	// Select the engine
-	var engine metaserp.Engine
+	var engine omniserp.Engine
 	var err error
 
 	if opts.EngineName != "" {
@@ -104,7 +104,7 @@ func NewWithOptions(opts *Options) (*Client, error) {
 			return nil, err
 		}
 	} else {
-		engine, err = metaserp.GetDefaultEngine(registry)
+		engine, err = omniserp.GetDefaultEngine(registry)
 		if err != nil && !opts.Silent {
 			log.Printf("Warning: %v", err)
 		}
@@ -124,7 +124,7 @@ func NewWithOptions(opts *Options) (*Client, error) {
 }
 
 // GetEngine retrieves a specific engine by name
-func (c *Client) GetEngine(name string) (metaserp.Engine, error) {
+func (c *Client) GetEngine(name string) (omniserp.Engine, error) {
 	engine, exists := c.registry.Get(name)
 	if !exists {
 		return nil, fmt.Errorf("engine '%s' not found. Available engines: %v", name, c.registry.List())
@@ -143,7 +143,7 @@ func (c *Client) SetEngine(name string) error {
 }
 
 // GetRegistry returns the underlying engine registry
-func (c *Client) GetRegistry() *metaserp.Registry {
+func (c *Client) GetRegistry() *omniserp.Registry {
 	return c.registry
 }
 
@@ -153,7 +153,7 @@ func (c *Client) ListEngines() []string {
 }
 
 // GetCurrentEngine returns the currently selected engine
-func (c *Client) GetCurrentEngine() metaserp.Engine {
+func (c *Client) GetCurrentEngine() omniserp.Engine {
 	return c.engine
 }
 
@@ -195,7 +195,7 @@ func (c *Client) GetSupportedTools() []string {
 }
 
 // Search performs a general web search
-func (c *Client) Search(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) Search(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearch); err != nil {
 		return nil, err
 	}
@@ -203,7 +203,7 @@ func (c *Client) Search(ctx context.Context, params metaserp.SearchParams) (*met
 }
 
 // SearchNews performs a news search
-func (c *Client) SearchNews(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchNews(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchNews); err != nil {
 		return nil, err
 	}
@@ -211,7 +211,7 @@ func (c *Client) SearchNews(ctx context.Context, params metaserp.SearchParams) (
 }
 
 // SearchImages performs an image search
-func (c *Client) SearchImages(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchImages(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchImages); err != nil {
 		return nil, err
 	}
@@ -219,7 +219,7 @@ func (c *Client) SearchImages(ctx context.Context, params metaserp.SearchParams)
 }
 
 // SearchVideos performs a video search
-func (c *Client) SearchVideos(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchVideos(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchVideos); err != nil {
 		return nil, err
 	}
@@ -227,7 +227,7 @@ func (c *Client) SearchVideos(ctx context.Context, params metaserp.SearchParams)
 }
 
 // SearchPlaces performs a places search
-func (c *Client) SearchPlaces(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchPlaces(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchPlaces); err != nil {
 		return nil, err
 	}
@@ -235,7 +235,7 @@ func (c *Client) SearchPlaces(ctx context.Context, params metaserp.SearchParams)
 }
 
 // SearchMaps performs a maps search
-func (c *Client) SearchMaps(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchMaps(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchMaps); err != nil {
 		return nil, err
 	}
@@ -243,7 +243,7 @@ func (c *Client) SearchMaps(ctx context.Context, params metaserp.SearchParams) (
 }
 
 // SearchReviews performs a reviews search
-func (c *Client) SearchReviews(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchReviews(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchReviews); err != nil {
 		return nil, err
 	}
@@ -251,7 +251,7 @@ func (c *Client) SearchReviews(ctx context.Context, params metaserp.SearchParams
 }
 
 // SearchShopping performs a shopping search
-func (c *Client) SearchShopping(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchShopping(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchShopping); err != nil {
 		return nil, err
 	}
@@ -259,7 +259,7 @@ func (c *Client) SearchShopping(ctx context.Context, params metaserp.SearchParam
 }
 
 // SearchScholar performs a scholar search
-func (c *Client) SearchScholar(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchScholar(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchScholar); err != nil {
 		return nil, err
 	}
@@ -267,7 +267,7 @@ func (c *Client) SearchScholar(ctx context.Context, params metaserp.SearchParams
 }
 
 // SearchLens performs a visual search (if supported)
-func (c *Client) SearchLens(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchLens(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchLens); err != nil {
 		return nil, err
 	}
@@ -275,7 +275,7 @@ func (c *Client) SearchLens(ctx context.Context, params metaserp.SearchParams) (
 }
 
 // SearchAutocomplete gets search suggestions
-func (c *Client) SearchAutocomplete(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+func (c *Client) SearchAutocomplete(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpSearchAutocomplete); err != nil {
 		return nil, err
 	}
@@ -283,7 +283,7 @@ func (c *Client) SearchAutocomplete(ctx context.Context, params metaserp.SearchP
 }
 
 // ScrapeWebpage scrapes content from a webpage
-func (c *Client) ScrapeWebpage(ctx context.Context, params metaserp.ScrapeParams) (*metaserp.SearchResult, error) {
+func (c *Client) ScrapeWebpage(ctx context.Context, params omniserp.ScrapeParams) (*omniserp.SearchResult, error) {
 	if err := c.checkSupport(OpScrapeWebpage); err != nil {
 		return nil, err
 	}
@@ -293,34 +293,34 @@ func (c *Client) ScrapeWebpage(ctx context.Context, params metaserp.ScrapeParams
 // Normalized response methods - these return unified response structures across all engines
 
 // SearchNormalized performs a web search and returns a normalized response
-func (c *Client) SearchNormalized(ctx context.Context, params metaserp.SearchParams) (*metaserp.NormalizedSearchResult, error) {
+func (c *Client) SearchNormalized(ctx context.Context, params omniserp.SearchParams) (*omniserp.NormalizedSearchResult, error) {
 	result, err := c.Search(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	normalizer := metaserp.NewNormalizer(c.GetName())
+	normalizer := omniserp.NewNormalizer(c.GetName())
 	return normalizer.NormalizeSearch(result, params.Query)
 }
 
 // SearchNewsNormalized performs a news search and returns a normalized response
-func (c *Client) SearchNewsNormalized(ctx context.Context, params metaserp.SearchParams) (*metaserp.NormalizedSearchResult, error) {
+func (c *Client) SearchNewsNormalized(ctx context.Context, params omniserp.SearchParams) (*omniserp.NormalizedSearchResult, error) {
 	result, err := c.SearchNews(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	normalizer := metaserp.NewNormalizer(c.GetName())
+	normalizer := omniserp.NewNormalizer(c.GetName())
 	return normalizer.NormalizeNews(result, params.Query)
 }
 
 // SearchImagesNormalized performs an image search and returns a normalized response
-func (c *Client) SearchImagesNormalized(ctx context.Context, params metaserp.SearchParams) (*metaserp.NormalizedSearchResult, error) {
+func (c *Client) SearchImagesNormalized(ctx context.Context, params omniserp.SearchParams) (*omniserp.NormalizedSearchResult, error) {
 	result, err := c.SearchImages(ctx, params)
 	if err != nil {
 		return nil, err
 	}
 
-	normalizer := metaserp.NewNormalizer(c.GetName())
+	normalizer := omniserp.NewNormalizer(c.GetName())
 	return normalizer.NormalizeImages(result, params.Query)
 }

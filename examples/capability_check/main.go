@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/grokify/metaserp"
-	"github.com/grokify/metaserp/client"
+	"github.com/agentplexus/omniserp"
+	"github.com/agentplexus/omniserp/client"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 		fmt.Printf("✓ %s supports Google Lens search\n", c.GetName())
 
 		// Try to perform a lens search
-		result, err := c.SearchLens(context.Background(), metaserp.SearchParams{
+		result, err := c.SearchLens(context.Background(), omniserp.SearchParams{
 			Query: "red apple",
 		})
 		if err != nil {
@@ -38,7 +38,7 @@ func main() {
 		fmt.Printf("✗ %s does NOT support Google Lens search\n", c.GetName())
 
 		// Try anyway to demonstrate error handling
-		_, err := c.SearchLens(context.Background(), metaserp.SearchParams{
+		_, err := c.SearchLens(context.Background(), omniserp.SearchParams{
 			Query: "red apple",
 		})
 		if errors.Is(err, client.ErrOperationNotSupported) {

@@ -8,8 +8,8 @@ import (
 
 	flags "github.com/jessevdk/go-flags"
 
-	"github.com/grokify/metaserp"
-	"github.com/grokify/metaserp/client"
+	"github.com/agentplexus/omniserp"
+	"github.com/agentplexus/omniserp/client"
 )
 
 type Options struct {
@@ -35,7 +35,7 @@ func main() {
 	}
 
 	// Perform search
-	params := metaserp.SearchParams{
+	params := omniserp.SearchParams{
 		Query:      query,
 		NumResults: 10,
 	}

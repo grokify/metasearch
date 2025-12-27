@@ -1,4 +1,4 @@
-# MetaSerp Multi-Search Client and MCP Server
+# OmniSerp Multi-Search Client and MCP Server
 
 [![Build Status][build-status-svg]][build-status-url]
 [![Lint Status][lint-status-svg]][lint-status-url]
@@ -11,7 +11,7 @@ A modular, plugin-based search engine abstraction package for Go that provides a
 
 ## Overview
 
-The `metaserp` package provides:
+The `omniserp` package provides:
 
 - **Unified Client SDK**: Single API that fronts multiple search engine backends (`client/client.go`)
 - **Normalized Responses**: Optional unified response structures across all engines (engine-agnostic)
@@ -22,7 +22,7 @@ The `metaserp` package provides:
 - **Type Safety**: Structured parameter and result types
 - **Registry System**: Automatic discovery and management of engines
 - **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcpserver`)
-- **CLI Tool**: Command-line interface for quick searches (`cmd/metaserp`)
+- **CLI Tool**: Command-line interface for quick searches (`cmd/omniserp`)
 
 ## Quick Start
 
@@ -34,8 +34,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/grokify/metaserp"
-    "github.com/grokify/metaserp/client"
+    "github.com/agentplexus/omniserp"
+    "github.com/agentplexus/omniserp/client"
 )
 
 func main() {
@@ -49,7 +49,7 @@ func main() {
     }
 
     // Perform a search
-    result, err := c.Search(context.Background(), metaserp.SearchParams{
+    result, err := c.Search(context.Background(), omniserp.SearchParams{
         Query: "golang programming",
     })
     if err != nil {
@@ -63,13 +63,13 @@ func main() {
 ## Project Structure
 
 ```
-metaserp/
+omniserp/
 ├── client/              # Search engine client implementations
 │   ├── client.go        # Unified Client SDK with capability checking
 │   ├── serper/          # Serper.dev implementation
 │   └── serpapi/         # SerpAPI implementation
 ├── cmd/                 # Executable applications
-│   ├── metaserp/      # CLI tool
+│   ├── omniserp/      # CLI tool
 │   └── mcpserver/       # MCP server for AI integration
 ├── examples/            # Example programs
 │   ├── capability_check/   # Capability checking demo
@@ -77,7 +77,7 @@ metaserp/
 ├── types.go             # Core types and Engine interface
 ├── normalized.go        # Normalized response types
 ├── normalizer.go        # Response normalizer
-├── metaserp.go        # Utility functions
+├── omniserp.go        # Utility functions
 └── README.md
 ```
 
@@ -87,7 +87,7 @@ metaserp/
 
 #### Installation
 ```bash
-go build ./cmd/metaserp
+go build ./cmd/omniserp
 ```
 
 #### Basic Usage
@@ -96,14 +96,14 @@ go build ./cmd/metaserp
 export SERPER_API_KEY="your_api_key"
 
 # Basic search (specify engine and query)
-./metaserp -e serper -q "golang programming"
+./omniserp -e serper -q "golang programming"
 
 # Or use long flags
-./metaserp --engine serpapi --query "golang programming"
+./omniserp --engine serpapi --query "golang programming"
 
 # With SerpAPI
 export SERPAPI_API_KEY="your_api_key"
-./metaserp -e serpapi -q "golang programming"
+./omniserp -e serpapi -q "golang programming"
 ```
 
 ### MCP Server
@@ -112,7 +112,7 @@ The Model Context Protocol (MCP) server enables AI assistants to perform web sea
 
 #### Installation
 ```bash
-go install github.com/grokify/metaserp/cmd/mcpserver@latest
+go install github.com/agentplexus/omniserp/cmd/mcpserver@latest
 ```
 
 Or build from source:
@@ -127,7 +127,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 ```json
 {
   "mcpServers": {
-    "metaserp": {
+    "omniserp": {
       "command": "mcpserver",
       "env": {
         "SERPER_API_KEY": "your_serper_api_key",
@@ -184,7 +184,7 @@ The `client` package provides a high-level SDK that simplifies working with mult
 ### Quick Start
 
 ```go
-import "github.com/grokify/metaserp/client"
+import "github.com/agentplexus/omniserp/client"
 
 // Create client - auto-selects engine based on SEARCH_ENGINE env var
 c, err := client.New()
@@ -282,8 +282,8 @@ import (
     "context"
     "log"
 
-    "github.com/grokify/metaserp"
-    "github.com/grokify/metaserp/client"
+    "github.com/agentplexus/omniserp"
+    "github.com/agentplexus/omniserp/client"
 )
 
 func main() {
@@ -296,7 +296,7 @@ func main() {
     log.Printf("Using engine: %s v%s", c.GetName(), c.GetVersion())
 
     // Perform a search
-    result, err := c.Search(context.Background(), metaserp.SearchParams{
+    result, err := c.Search(context.Background(), omniserp.SearchParams{
         Query:      "golang programming",
         NumResults: 10,
         Language:   "en",
@@ -352,14 +352,14 @@ For direct registry access:
 
 ```go
 import (
-    "github.com/grokify/metaserp"
-    "github.com/grokify/metaserp/client/serper"
-    "github.com/grokify/metaserp/client/serpapi"
+    "github.com/agentplexus/omniserp"
+    "github.com/agentplexus/omniserp/client/serper"
+    "github.com/agentplexus/omniserp/client/serpapi"
 )
 
 func main() {
     // Create registry and manually register engines
-    registry := metaserp.NewRegistry()
+    registry := omniserp.NewRegistry()
 
     // Register engines (handle errors as needed)
     if serperEngine, err := serper.New(); err == nil {
@@ -370,13 +370,13 @@ func main() {
     }
 
     // Get default engine (based on SEARCH_ENGINE env var)
-    engine, err := metaserp.GetDefaultEngine(registry)
+    engine, err := omniserp.GetDefaultEngine(registry)
     if err != nil {
         log.Printf("Warning: %v", err)
     }
 
     // Perform a search
-    result, err := engine.Search(context.Background(), metaserp.SearchParams{
+    result, err := engine.Search(context.Background(), omniserp.SearchParams{
         Query: "golang programming",
     })
     // ...
@@ -386,13 +386,13 @@ func main() {
 ## Supported Engines
 
 ### Serper
-- **Package**: `github.com/grokify/metaserp/client/serper`
+- **Package**: `github.com/agentplexus/omniserp/client/serper`
 - **Environment Variable**: `SERPER_API_KEY`
 - **Website**: [serper.dev](https://serper.dev)
 - **Supported Operations**: All search types including Lens
 
 ### SerpAPI
-- **Package**: `github.com/grokify/metaserp/client/serpapi`
+- **Package**: `github.com/agentplexus/omniserp/client/serpapi`
 - **Environment Variable**: `SERPAPI_API_KEY`
 - **Website**: [serpapi.com](https://serpapi.com)
 - **Supported Operations**: All search types except Lens
@@ -475,12 +475,12 @@ type SearchResult struct {
 ### Basic Registry Operations
 ```go
 import (
-    "github.com/grokify/metaserp"
-    "github.com/grokify/metaserp/client/serper"
+    "github.com/agentplexus/omniserp"
+    "github.com/agentplexus/omniserp/client/serper"
 )
 
 // Create new registry and register engines
-registry := metaserp.NewRegistry()
+registry := omniserp.NewRegistry()
 
 // Register engines manually
 if serperEngine, err := serper.New(); err == nil {
@@ -504,11 +504,11 @@ allEngines := registry.GetAll()
 ```go
 // Get info about specific engine
 engine, _ := registry.Get("serper")
-info := metaserp.GetEngineInfo(engine)
+info := omniserp.GetEngineInfo(engine)
 log.Printf("Engine: %s v%s, Tools: %v", info.Name, info.Version, info.SupportedTools)
 
 // Get info about all engines
-allInfo := metaserp.GetAllEngineInfo(registry)
+allInfo := omniserp.GetAllEngineInfo(registry)
 ```
 
 ## Environment Configuration
@@ -537,7 +537,7 @@ import (
     "context"
     "fmt"
     "os"
-    "github.com/grokify/metaserp"
+    "github.com/agentplexus/omniserp"
 )
 
 type Engine struct {
@@ -557,8 +557,8 @@ func (e *Engine) GetName() string { return "newengine" }
 func (e *Engine) GetVersion() string { return "1.0.0" }
 func (e *Engine) GetSupportedTools() []string { /* return supported tools */ }
 
-// Implement all other metaserp.Engine methods...
-func (e *Engine) Search(ctx context.Context, params metaserp.SearchParams) (*metaserp.SearchResult, error) {
+// Implement all other omniserp.Engine methods...
+func (e *Engine) Search(ctx context.Context, params omniserp.SearchParams) (*omniserp.SearchResult, error) {
     // Implementation
 }
 // ... implement all other interface methods
@@ -568,13 +568,13 @@ func (e *Engine) Search(ctx context.Context, params metaserp.SearchParams) (*met
 ```go
 // In your application code (e.g., cmd/yourapp/main.go)
 import (
-    "github.com/grokify/metaserp"
-    "github.com/grokify/metaserp/client/newengine"
-    "github.com/grokify/metaserp/client/serper"
+    "github.com/agentplexus/omniserp"
+    "github.com/agentplexus/omniserp/client/newengine"
+    "github.com/agentplexus/omniserp/client/serper"
 )
 
-func createRegistry() *metaserp.Registry {
-    registry := metaserp.NewRegistry()
+func createRegistry() *omniserp.Registry {
+    registry := omniserp.NewRegistry()
 
     // Register existing engines
     if serperEngine, err := serper.New(); err == nil {
@@ -591,14 +591,14 @@ func createRegistry() *metaserp.Registry {
 ```
 
 3. **Update CLI (optional)**:
-   Add the new engine import and registration to `cmd/metaserp/main.go`
+   Add the new engine import and registration to `cmd/omniserp/main.go`
 
 ## Error Handling
 
 The package provides consistent error handling:
 
 ```go
-engine, err := metaserp.GetDefaultEngine(registry)
+engine, err := omniserp.GetDefaultEngine(registry)
 if err != nil {
     // Handle engine selection error
     log.Printf("Engine selection warning: %v", err)
@@ -648,17 +648,17 @@ go test -v ./client
 
 The registry is safe for concurrent read operations. Engine implementations should be thread-safe for concurrent use.
 
- [build-status-svg]: https://github.com/grokify/metaserp/actions/workflows/ci.yaml/badge.svg?branch=main
- [build-status-url]: https://github.com/grokify/metaserp/actions/workflows/ci.yaml
- [lint-status-svg]: https://github.com/grokify/metaserp/actions/workflows/lint.yaml/badge.svg?branch=main
- [lint-status-url]: https://github.com/grokify/metaserp/actions/workflows/lint.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/grokify/metaserp
- [goreport-url]: https://goreportcard.com/report/github.com/grokify/metaserp
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/grokify/metaserp
- [docs-godoc-url]: https://pkg.go.dev/github.com/grokify/metaserp
+ [build-status-svg]: https://github.com/agentplexus/omniserp/actions/workflows/ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/agentplexus/omniserp/actions/workflows/ci.yaml
+ [lint-status-svg]: https://github.com/agentplexus/omniserp/actions/workflows/lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/agentplexus/omniserp/actions/workflows/lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/agentplexus/omniserp
+ [goreport-url]: https://goreportcard.com/report/github.com/agentplexus/omniserp
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/agentplexus/omniserp
+ [docs-godoc-url]: https://pkg.go.dev/github.com/agentplexus/omniserp
  [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
- [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=grokify%2Fmetaserp
- [loc-svg]: https://tokei.rs/b1/github/grokify/metaserp
- [repo-url]: https://github.com/grokify/metaserp
+ [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=agentplexus%2Fomniserp
+ [loc-svg]: https://tokei.rs/b1/github/agentplexus/omniserp
+ [repo-url]: https://github.com/agentplexus/omniserp
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/grokify/metaserp/blob/master/LICENSE
+ [license-url]: https://github.com/agentplexus/omniserp/blob/master/LICENSE

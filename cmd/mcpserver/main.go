@@ -8,15 +8,15 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
-	"github.com/grokify/metaserp"
-	"github.com/grokify/metaserp/client"
+	"github.com/agentplexus/omniserp"
+	"github.com/agentplexus/omniserp/client"
 )
 
 // ToolDefinition defines a search tool with its metadata
 type ToolDefinition struct {
 	Name        string
 	Description string
-	SearchFunc  func(context.Context, metaserp.SearchParams) (*metaserp.SearchResult, error)
+	SearchFunc  func(context.Context, omniserp.SearchParams) (*omniserp.SearchResult, error)
 }
 
 func main() {
@@ -64,7 +64,7 @@ func main() {
 			mcp.AddTool(server, &mcp.Tool{
 				Name:        toolName,
 				Description: toolDesc,
-			}, func(ctx context.Context, req *mcp.CallToolRequest, args metaserp.SearchParams) (*mcp.CallToolResult, any, error) {
+			}, func(ctx context.Context, req *mcp.CallToolRequest, args omniserp.SearchParams) (*mcp.CallToolResult, any, error) {
 				result, err := searchFunc(ctx, args)
 				if err != nil {
 					return nil, nil, fmt.Errorf("%s failed: %w", toolName, err)
@@ -89,7 +89,7 @@ func main() {
 		mcp.AddTool(server, &mcp.Tool{
 			Name:        client.OpScrapeWebpage,
 			Description: "Scrape content from a webpage",
-		}, func(ctx context.Context, req *mcp.CallToolRequest, args metaserp.ScrapeParams) (*mcp.CallToolResult, any, error) {
+		}, func(ctx context.Context, req *mcp.CallToolRequest, args omniserp.ScrapeParams) (*mcp.CallToolResult, any, error) {
 			result, err := searchClient.ScrapeWebpage(ctx, args)
 			if err != nil {
 				return nil, nil, fmt.Errorf("scraping failed: %w", err)

@@ -21,7 +21,7 @@ The `omniserp` package provides:
 - **Multiple Providers**: Built-in support for Serper and SerpAPI
 - **Type Safety**: Structured parameter and result types
 - **Registry System**: Automatic discovery and management of engines
-- **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcpserver`)
+- **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcp-omniserp`)
 - **CLI Tool**: Command-line interface for quick searches (`cmd/omniserp`)
 
 ## Quick Start
@@ -69,8 +69,8 @@ omniserp/
 │   ├── serper/          # Serper.dev implementation
 │   └── serpapi/         # SerpAPI implementation
 ├── cmd/                 # Executable applications
-│   ├── omniserp/      # CLI tool
-│   └── mcpserver/       # MCP server for AI integration
+│   ├── mcp-omniserp/    # MCP server for AI integration
+│   └── omniserp/        # CLI tool
 ├── examples/            # Example programs
 │   ├── capability_check/   # Capability checking demo
 │   └── normalized_search/  # Normalized responses demo
@@ -112,12 +112,12 @@ The Model Context Protocol (MCP) server enables AI assistants to perform web sea
 
 #### Installation
 ```bash
-go install github.com/agentplexus/omniserp/cmd/mcpserver@latest
+go install github.com/agentplexus/omniserp/cmd/mcp-omniserp@latest
 ```
 
 Or build from source:
 ```bash
-go build ./cmd/mcpserver
+go build ./cmd/mcp-omniserp
 ```
 
 #### Configuration
@@ -128,7 +128,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 {
   "mcpServers": {
     "omniserp": {
-      "command": "mcpserver",
+      "command": "mcp-omniserp",
       "env": {
         "SERPER_API_KEY": "your_serper_api_key",
         "SEARCH_ENGINE": "serper"

@@ -256,7 +256,7 @@ type Engine interface {
 
 ```bash
 # Claude Desktop integration
-./mcpserver
+./mcp-omniserp
 # Registers 12 tools for Serper
 # Registers 11 tools for SerpApi
 ```

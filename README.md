@@ -13,16 +13,16 @@ A modular, plugin-based search engine abstraction package for Go that provides a
 
 The `omniserp` package provides:
 
-- **Unified Client SDK**: Single API that fronts multiple search engine backends (`client/client.go`)
-- **Normalized Responses**: Optional unified response structures across all engines (engine-agnostic)
-- **Capability Checking**: Automatic validation of operation support across different backends
-- **Unified Interface**: Common `Engine` interface for all search providers
-- **Plugin Architecture**: Easy addition of new search engines
-- **Multiple Providers**: Built-in support for Serper and SerpAPI
-- **Type Safety**: Structured parameter and result types
-- **Registry System**: Automatic discovery and management of engines
-- **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcp-omniserp`)
-- **CLI Tool**: Command-line interface for quick searches (`cmd/omniserp`)
+- 📦 **Unified Client SDK**: Single API that fronts multiple search engine backends (`client/client.go`)
+- 📐 **Normalized Responses**: Optional unified response structures across all engines (engine-agnostic)
+- ✅ **Capability Checking**: Automatic validation of operation support across different backends
+- 🔌 **Unified Interface**: Common `Engine` interface for all search providers
+- 🧩 **Plugin Architecture**: Easy addition of new search engines
+- 🤝 **Multiple Providers**: Built-in support for Serper and SerpAPI
+- 🔒 **Type Safety**: Structured parameter and result types
+- 📋 **Registry System**: Automatic discovery and management of engines
+- 🤖 **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcp-omniserp`)
+- ⌨️ **CLI Tool**: Command-line interface for quick searches (`cmd/omniserp`)
 
 ## Quick Start
 

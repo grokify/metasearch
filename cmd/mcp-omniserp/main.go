@@ -16,11 +16,11 @@
 //
 //  2. Create ~/.agentplexus/policy.json:
 //     {
-//       "version": 1,
-//       "local": {
-//         "require_encryption": true,
-//         "min_security_score": 50
-//       }
+//     "version": 1,
+//     "local": {
+//     "require_encryption": true,
+//     "min_security_score": 50
+//     }
 //     }
 //
 //  3. Run the server:
@@ -37,14 +37,14 @@ import (
 	"log"
 	"os"
 
+	keyring "github.com/agentplexus/omnivault-keyring"
+	"github.com/agentplexus/vaultguard"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 
 	"github.com/agentplexus/omniserp"
 	"github.com/agentplexus/omniserp/client"
-	"github.com/agentplexus/omniserp/client/serper"
 	"github.com/agentplexus/omniserp/client/serpapi"
-	keyring "github.com/agentplexus/omnivault-keyring"
-	"github.com/agentplexus/vaultguard"
+	"github.com/agentplexus/omniserp/client/serper"
 )
 
 // ToolDefinition defines a search tool with its metadata

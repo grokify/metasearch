@@ -64,20 +64,20 @@ func main() {
 
 ```
 omniserp/
-├── client/              # Search engine client implementations
-│   ├── client.go        # Unified Client SDK with capability checking
-│   ├── serper/          # Serper.dev implementation
-│   └── serpapi/         # SerpAPI implementation
-├── cmd/                 # Executable applications
-│   ├── mcp-omniserp/    # MCP server for AI integration
-│   └── omniserp/        # CLI tool
-├── examples/            # Example programs
+├── client/                 # Search engine client implementations
+│   ├── client.go           # Unified Client SDK with capability checking
+│   ├── serper/             # Serper.dev implementation
+│   └── serpapi/            # SerpAPI implementation
+├── cmd/                    # Executable applications
+│   ├── mcp-omniserp/       # MCP server for AI integration
+│   └── omniserp/           # CLI tool
+├── examples/               # Example programs
 │   ├── capability_check/   # Capability checking demo
 │   └── normalized_search/  # Normalized responses demo
-├── types.go             # Core types and Engine interface
-├── normalized.go        # Normalized response types
-├── normalizer.go        # Response normalizer
-├── omniserp.go        # Utility functions
+├── types.go                # Core types and Engine interface
+├── normalized.go           # Normalized response types
+├── normalizer.go           # Response normalizer
+├── omniserp.go             # Utility functions
 └── README.md
 ```
 

@@ -38,6 +38,18 @@ func New() (*Engine, error) {
 	}, nil
 }
 
+// NewWithAPIKey creates a new SerpAPI engine instance with the provided API key
+func NewWithAPIKey(apiKey string) (*Engine, error) {
+	if apiKey == "" {
+		return nil, fmt.Errorf("API key is required")
+	}
+
+	return &Engine{
+		apiKey: apiKey,
+		client: &http.Client{},
+	}, nil
+}
+
 // GetName returns the engine name
 func (e *Engine) GetName() string {
 	return engineName

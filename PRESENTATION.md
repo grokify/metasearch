@@ -37,6 +37,14 @@ mermaid.initialize({
 
 ---
 
+<!-- _paginate: false -->
+<!-- _class: lead -->
+
+# Part 1
+## The Problem 🎯
+
+---
+
 # The Problem ⚠️
 
 ## AI agents need real-time information
@@ -86,6 +94,14 @@ mermaid.initialize({
 
 ---
 
+<!-- _paginate: false -->
+<!-- _class: lead -->
+
+# Part 2
+## Search Providers 🤝
+
+---
+
 # Meet the Providers 🤝
 
 ## Serper.dev ⚡
@@ -123,6 +139,14 @@ mermaid.initialize({
 | 🛒 Shopping | ✅ | ✅ |
 | 🎓 Scholar | ✅ | ✅ |
 | 👁️ **Lens** | ✅ | ❌ |
+
+---
+
+<!-- _paginate: false -->
+<!-- _class: lead -->
+
+# Part 3
+## The Solution 💡
 
 ---
 
@@ -250,6 +274,14 @@ type Engine interface {
 
 ---
 
+<!-- _paginate: false -->
+<!-- _class: lead -->
+
+# Part 4
+## Real-World Applications 🌍
+
+---
+
 # Real-World Applications 🌍
 
 ## 1. MCP Server for AI Assistants 🤖
@@ -288,6 +320,46 @@ if err != nil {
 - 📊 Use different providers for different query types
 - 📈 Route high-volume queries to cheaper provider
 - ⭐ Reserve premium features for when needed
+
+---
+
+# Real-World Applications 🌍
+
+## 4. Secure Credentials with VaultGuard 🔐
+
+```json
+// ~/.agentplexus/policy.json
+{
+  "version": 1,
+  "local": {
+    "require_encryption": true,
+    "min_security_score": 50
+  }
+}
+```
+
+🔑 API keys stored in OS keychain, not environment variables
+
+---
+
+# VaultGuard Integration 🛡️
+
+## Enterprise-grade security for AI agents
+
+- 🔐 **OS Keychain**: macOS Keychain, Windows Credential Manager, Linux Secret Service
+- 📊 **Security Posture**: Validates disk encryption, biometrics before credential access
+- 📜 **Policy-Based**: Configure minimum security requirements
+- 🔄 **Graceful Fallback**: Uses env vars when no policy exists
+
+🏢 Built on **AgentPlexus VaultGuard** security framework
+
+---
+
+<!-- _paginate: false -->
+<!-- _class: lead -->
+
+# Part 5
+## Getting Started 🚀
 
 ---
 
@@ -344,6 +416,7 @@ result, _ := c.Search(ctx, omniserp.SearchParams{
 3. 📐 **Response inconsistency** → normalization layer
 4. ⚖️ **Feature gaps** → capability checking
 5. 🤖 **Agent integration** → MCP server included
+6. 🔐 **Credential security** → VaultGuard integration
 
 ---
 

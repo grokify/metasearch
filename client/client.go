@@ -59,6 +59,19 @@ type Options struct {
 	Silent bool
 }
 
+// NewWithRegistry creates a new client with a pre-configured registry and engine name
+func NewWithRegistry(registry *omniserp.Registry, engineName string) (*Client, error) {
+	engine, exists := registry.Get(engineName)
+	if !exists {
+		return nil, fmt.Errorf("engine '%s' not found in registry", engineName)
+	}
+
+	return &Client{
+		registry: registry,
+		engine:   engine,
+	}, nil
+}
+
 // NewWithOptions creates a new client with custom options
 func NewWithOptions(opts *Options) (*Client, error) {
 	if opts == nil {

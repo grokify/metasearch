@@ -21,7 +21,7 @@ The `omniserp` package provides:
 - 🤝 **Multiple Providers**: Built-in support for Serper and SerpAPI
 - 🔒 **Type Safety**: Structured parameter and result types
 - 📋 **Registry System**: Automatic discovery and management of engines
-- 🤖 **MCP Server**: Model Context Protocol server for AI integration (`cmd/mcp-omniserp`)
+- 🤖 **MCP Server**: Model Context Protocol server for AI integration with optional secure credentials (`cmd/mcp-omniserp`)
 - ⌨️ **CLI Tool**: Command-line interface for quick searches (`cmd/omniserp`)
 
 ## Quick Start
@@ -69,7 +69,7 @@ omniserp/
 │   ├── serper/             # Serper.dev implementation
 │   └── serpapi/            # SerpAPI implementation
 ├── cmd/                    # Executable applications
-│   ├── mcp-omniserp/       # MCP server for AI integration
+│   ├── mcp-omniserp/       # MCP server for AI integration (with optional secure credentials)
 │   └── omniserp/           # CLI tool
 ├── examples/               # Example programs
 │   ├── capability_check/   # Capability checking demo
@@ -167,6 +167,41 @@ All searches support parameters like location, language, country, and number of 
 2025/12/13 19:00:00 Registered 11 tools: [google_search, google_search_news, ...]
 2025/12/13 19:00:00 Skipped 1 unsupported tools: [google_search_lens]
 ```
+
+#### Secure Mode (Optional)
+
+The MCP server supports optional secure credential management using VaultGuard. When a policy file exists, API keys are retrieved from the OS keychain instead of environment variables.
+
+**Setup for Secure Mode:**
+
+1. Store your API key in the keychain:
+   ```bash
+   security add-generic-password -s "omnivault" -a "SERPER_API_KEY" -w "your-key"
+   ```
+
+2. Create a security policy (`~/.agentplexus/policy.json`):
+   ```json
+   {
+     "version": 1,
+     "local": {
+       "require_encryption": true,
+       "min_security_score": 50
+     }
+   }
+   ```
+
+3. Update your Claude Desktop config (no `env` section needed):
+   ```json
+   {
+     "mcpServers": {
+       "omniserp": {
+         "command": "mcp-omniserp"
+       }
+     }
+   }
+   ```
+
+**Note**: Without a policy file, the server works exactly as before using environment variables.
 
 ## Client SDK
 

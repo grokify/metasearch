@@ -25,11 +25,20 @@ type Engine struct {
 	client *http.Client
 }
 
-// New creates a new Serper engine instance
+// New creates a new Serper engine instance using SERPER_API_KEY env var.
 func New() (*Engine, error) {
 	apiKey := os.Getenv("SERPER_API_KEY")
 	if apiKey == "" {
 		return nil, fmt.Errorf("SERPER_API_KEY environment variable is required")
+	}
+	return NewWithAPIKey(apiKey)
+}
+
+// NewWithAPIKey creates a new Serper engine instance with the provided API key.
+// Use this when retrieving the API key from a secure source like OS keychain.
+func NewWithAPIKey(apiKey string) (*Engine, error) {
+	if apiKey == "" {
+		return nil, fmt.Errorf("API key is required")
 	}
 
 	return &Engine{

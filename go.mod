@@ -6,7 +6,7 @@ require (
 	github.com/agentplexus/omnivault-keyring v0.1.0
 	github.com/agentplexus/vaultguard v0.2.0
 	github.com/jessevdk/go-flags v1.6.1
-	github.com/modelcontextprotocol/go-sdk v1.2.0
+	github.com/modelcontextprotocol/go-sdk v1.3.0
 )
 
 require (

@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/agentplexus/omniserp"
+	"github.com/plexusone/omniserp"
 )
 
 // TestCapabilityChecking tests that the client properly validates operation support

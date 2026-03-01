@@ -8,8 +8,8 @@ import (
 
 	flags "github.com/jessevdk/go-flags"
 
-	"github.com/agentplexus/omniserp"
-	"github.com/agentplexus/omniserp/client"
+	"github.com/plexusone/omniserp"
+	"github.com/plexusone/omniserp/client"
 )
 
 type Options struct {

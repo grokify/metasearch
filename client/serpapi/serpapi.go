@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/agentplexus/omniserp"
+	"github.com/plexusone/omniserp"
 )
 
 const (
@@ -99,6 +99,7 @@ func (e *Engine) makeRequest(params map[string]string) (*omniserp.SearchResult, 
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
+	// #nosec G704 -- request to hardcoded SerpAPI endpoint
 	resp, err := e.client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request: %w", err)
@@ -249,6 +250,7 @@ func (e *Engine) ScrapeWebpage(ctx context.Context, params omniserp.ScrapeParams
 
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
+	// #nosec G704 -- URL is intentionally user-provided for webpage scraping
 	resp, err := e.client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to scrape webpage: %w", err)

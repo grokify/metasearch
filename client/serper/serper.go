@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/agentplexus/omniserp"
+	"github.com/plexusone/omniserp"
 )
 
 const (
@@ -90,6 +90,7 @@ func (e *Engine) makeRequest(endpoint string, params map[string]interface{}) (*o
 	req.Header.Set("X-API-KEY", e.apiKey)
 	req.Header.Set("Content-Type", "application/json")
 
+	// #nosec G704 -- request to hardcoded Serper API endpoint
 	resp, err := e.client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to make request: %w", err)

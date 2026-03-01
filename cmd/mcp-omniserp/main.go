@@ -14,7 +14,7 @@
 //  1. Store your API key in the keychain:
 //     security add-generic-password -s "omnivault" -a "SERPER_API_KEY" -w "your-key"
 //
-//  2. Create ~/.agentplexus/policy.json:
+//  2. Create ~/.vaultguard/policy.json:
 //     {
 //     "version": 1,
 //     "local": {
@@ -37,14 +37,14 @@ import (
 	"log"
 	"os"
 
-	keyring "github.com/agentplexus/omnivault-keyring"
-	"github.com/agentplexus/vaultguard"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
+	keyring "github.com/plexusone/omnivault-keyring"
+	"github.com/plexusone/vaultguard"
 
-	"github.com/agentplexus/omniserp"
-	"github.com/agentplexus/omniserp/client"
-	"github.com/agentplexus/omniserp/client/serpapi"
-	"github.com/agentplexus/omniserp/client/serper"
+	"github.com/plexusone/omniserp"
+	"github.com/plexusone/omniserp/client"
+	"github.com/plexusone/omniserp/client/serpapi"
+	"github.com/plexusone/omniserp/client/serper"
 )
 
 // ToolDefinition defines a search tool with its metadata

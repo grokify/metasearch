@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/agentplexus/omniserp"
-	"github.com/agentplexus/omniserp/client/serpapi"
-	"github.com/agentplexus/omniserp/client/serper"
+	"github.com/plexusone/omniserp"
+	"github.com/plexusone/omniserp/client/serpapi"
+	"github.com/plexusone/omniserp/client/serper"
 )
 
 // Operation names that map to Engine interface methods

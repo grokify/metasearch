@@ -1,0 +1,163 @@
+{
+  "irVersion": "1.0",
+  "project": "omniserp",
+  "repository": "https://github.com/plexusone/omniserp",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "releases": [
+    {
+      "version": "v0.8.0",
+      "date": "2026-03-01",
+      "highlights": [
+        { "description": "Module path migrated from agentplexus to plexusone organization" }
+      ],
+      "breaking": [
+        { "description": "Module path changed from `github.com/agentplexus/omniserp` to `github.com/plexusone/omniserp`", "commit": "0cc35da" }
+      ],
+      "changed": [
+        { "description": "Update omnivault-keyring dependency to `github.com/plexusone/omnivault-keyring` v0.2.0", "commit": "0cc35da" },
+        { "description": "Update vaultguard dependency to `github.com/plexusone/vaultguard` v0.3.0", "commit": "0cc35da" },
+        { "description": "Update all internal imports to use new module path", "commit": "0cc35da" },
+        { "description": "Update documentation URLs to plexusone organization", "commit": "2fac281" },
+        { "description": "Update policy path from `~/.agentplexus` to `~/.vaultguard`", "commit": "2fac281" },
+        { "description": "Migrate to standard plexusone reusable workflows", "commit": "95b66d1" }
+      ],
+      "fixed": [
+        { "description": "Add gosec G704 suppressions for SSRF false positives in API clients", "commit": "0cc35da" }
+      ],
+      "build": [
+        { "description": "Remove rendered HTML documentation (regenerate with Marp)", "commit": "0786336" },
+        { "description": "Add example binaries to .gitignore", "commit": "b4fe5aa" }
+      ],
+      "dependencies": [
+        { "description": "Bump `github.com/modelcontextprotocol/go-sdk` to v1.4.0", "commit": "eb7f190" }
+      ]
+    },
+    {
+      "version": "v0.7.0",
+      "date": "2025-12-29",
+      "highlights": [
+        { "description": "Secure credential management with VaultGuard integration" },
+        { "description": "MCP server renamed to follow mcp- prefix convention" }
+      ],
+      "added": [
+        { "description": "VaultGuard integration for secure API key management via OS keychain", "commit": "f28eaad" },
+        { "description": "Policy-based credential access with security posture checking", "commit": "f28eaad" },
+        { "description": "Marp presentation for project overview", "commit": "7a76a60" }
+      ],
+      "changed": [
+        { "description": "Rename MCP server from `mcpserver` to `mcp-omniserp` following mcp- prefix pattern", "commit": "cda14ff" }
+      ],
+      "documentation": [
+        { "description": "Add icons to README Overview feature list", "commit": "55197bd" },
+        { "description": "Update README formatting", "commit": "184b867" },
+        { "description": "Update presentation HTML", "commit": "5a30714" }
+      ]
+    },
+    {
+      "version": "v0.6.0",
+      "date": "2025-12-27",
+      "highlights": [
+        { "description": "Repository transferred to agentplexus organization" }
+      ],
+      "changed": [
+        { "description": "Transfer repository to agentplexus organization", "commit": "df21780" }
+      ]
+    },
+    {
+      "version": "v0.5.0",
+      "date": "2025-12-20",
+      "highlights": [
+        { "description": "Package renamed from metaserp to omniserp" }
+      ],
+      "changed": [
+        { "description": "Rename package from metaserp to omniserp", "commit": "128ba25" }
+      ],
+      "documentation": [
+        { "description": "Update README.md", "commit": "62813a7" }
+      ],
+      "dependencies": [
+        { "description": "Update go.mod dependencies", "commit": "2cb4eb3" }
+      ]
+    },
+    {
+      "version": "v0.4.0",
+      "date": "2025-12-13",
+      "highlights": [
+        { "description": "Normalized response schema for engine-agnostic results" }
+      ],
+      "added": [
+        { "description": "Normalized canonical response schema for cross-engine compatibility", "commit": "e71e7fc" },
+        { "description": "`SearchNormalized()`, `SearchNewsNormalized()`, `SearchImagesNormalized()` methods", "commit": "e71e7fc" }
+      ]
+    },
+    {
+      "version": "v0.3.0",
+      "date": "2025-12-13",
+      "highlights": [
+        { "description": "Unified Client SDK with capability checking" }
+      ],
+      "added": [
+        { "description": "Client SDK with auto-registration of search engines", "commit": "4846937" },
+        { "description": "Runtime capability checking with `SupportsOperation()`", "commit": "4846937" },
+        { "description": "Engine switching at runtime with `SetEngine()`", "commit": "4846937" },
+        { "description": "`ErrOperationNotSupported` error for unsupported operations", "commit": "4846937" }
+      ],
+      "changed": [
+        { "description": "MCP server dynamically registers only supported tools", "commit": "ced93fc" },
+        { "description": "CLI updated to use `github.com/jessevdk/go-flags`", "commit": "4d86f38" }
+      ],
+      "tests": [
+        { "description": "Add capability checking tests", "commit": "f4c1118" }
+      ],
+      "documentation": [
+        { "description": "Update README title", "commit": "f24c9ba" }
+      ]
+    },
+    {
+      "version": "v0.2.0",
+      "date": "2025-12-13",
+      "highlights": [
+        { "description": "MCP server for AI assistant integration" }
+      ],
+      "added": [
+        { "description": "MCP (Model Context Protocol) server for Claude Desktop integration", "commit": "2f48efc" },
+        { "description": "12 search tools registered for Serper, 11 for SerpAPI", "commit": "2f48efc" }
+      ],
+      "changed": [
+        { "description": "Reorganize client code into separate package", "commit": "e14e394" },
+        { "description": "Move mcpserver to cmd directory", "commit": "6fb8d9a" }
+      ],
+      "dependencies": [
+        { "description": "Bump actions/checkout from 5 to 6", "commit": "0d264ae" },
+        { "description": "Bump golangci/golangci-lint-action from 8 to 9", "commit": "011d185" },
+        { "description": "Bump github/codeql-action from 3 to 4", "commit": "9678875" }
+      ]
+    },
+    {
+      "version": "v0.1.1",
+      "date": "2025-09-18",
+      "fixed": [
+        { "description": "Fix SearchParams jsonschema tags", "commit": "53b91e8" }
+      ]
+    },
+    {
+      "version": "v0.1.0",
+      "date": "2025-09-18",
+      "highlights": [
+        { "description": "Multi-provider search engine abstraction for Go" },
+        { "description": "Unified Engine interface with Serper and SerpAPI support" }
+      ],
+      "added": [
+        { "description": "Core `Engine` interface for search provider abstraction", "commit": "49dba10" },
+        { "description": "Serper.dev search engine implementation with 12 operations", "commit": "49dba10" },
+        { "description": "SerpAPI search engine implementation with 11 operations", "commit": "49dba10" },
+        { "description": "Registry system for engine discovery and management", "commit": "49dba10" },
+        { "description": "CLI tool for command-line searches", "commit": "49dba10" },
+        { "description": "Search operations: web, news, images, videos, places, maps, reviews, shopping, scholar, lens, autocomplete", "commit": "49dba10" },
+        { "description": "Webpage scraping capability", "commit": "49dba10" },
+        { "description": "CI/CD workflows with GitHub Actions", "commit": "49dba10" }
+      ]
+    }
+  ]
+}

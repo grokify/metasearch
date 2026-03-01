@@ -3,7 +3,7 @@ module github.com/agentplexus/omniserp
 go 1.25.5
 
 require (
-	github.com/agentplexus/omnivault-keyring v0.1.0
+	github.com/agentplexus/omnivault-keyring v0.1.1
 	github.com/agentplexus/vaultguard v0.2.0
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/modelcontextprotocol/go-sdk v1.4.0
@@ -11,7 +11,7 @@ require (
 
 require (
 	al.essio.dev/pkg/shellescape v1.6.0 // indirect
-	github.com/agentplexus/omnivault v0.2.1 // indirect
+	github.com/agentplexus/omnivault v0.2.2 // indirect
 	github.com/agentplexus/posture v0.2.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/danieljoos/wincred v1.2.3 // indirect

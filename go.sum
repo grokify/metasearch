@@ -1,9 +1,9 @@
 al.essio.dev/pkg/shellescape v1.6.0 h1:NxFcEqzFSEVCGN2yq7Huv/9hyCEGVa/TncnOOBBeXHA=
 al.essio.dev/pkg/shellescape v1.6.0/go.mod h1:6sIqp7X2P6mThCQ7twERpZTuigpr6KbZWtls1U8I890=
-github.com/agentplexus/omnivault v0.2.1 h1:7Inras4SbRrQIEguDvvr0SKc11pvBOmWKKuGUdcdXeg=
-github.com/agentplexus/omnivault v0.2.1/go.mod h1:zS5AsNGKNuRRMyA4vSJZXmV1F4lOhAGeZD50kKOpLlk=
-github.com/agentplexus/omnivault-keyring v0.1.0 h1:4zb0Ws8m146Av8bjuFSPluOjpUv0ss9pLS/GfGz8xHc=
-github.com/agentplexus/omnivault-keyring v0.1.0/go.mod h1:qSMMM0V+DcI+jGlA534HQneY4qXOqoN4ThDHXWHN8Pw=
+github.com/agentplexus/omnivault v0.2.2 h1:1BUQtzoTLywqqnKqyctxDrgf72XDxA+GI9MVWJ+07G0=
+github.com/agentplexus/omnivault v0.2.2/go.mod h1:uWP5ItrD3aCmIk4HLwZun2GxkZc+nVStLjJAqroW/Is=
+github.com/agentplexus/omnivault-keyring v0.1.1 h1:sthjOvKnih0Pq40a/RQ/+grCgLLZFW9mVTp0sQnwCIA=
+github.com/agentplexus/omnivault-keyring v0.1.1/go.mod h1:P8b3hVM4UeWj3NVAJd8NaKRqBLVTt3t8q21u4na8fu0=
 github.com/agentplexus/posture v0.2.0 h1:YstmU3QELdYI+YYa5mquqaRURR+eF6/Atn8vYIFcYRc=
 github.com/agentplexus/posture v0.2.0/go.mod h1:VzVmJd/Ls6pm+wwOuBznukDVoJmfbCPHZME8gbmlpCA=
 github.com/agentplexus/vaultguard v0.2.0 h1:uypEenCcJhJIes+fHsXHThBRXAV4ia0LCfOiupHTJWs=

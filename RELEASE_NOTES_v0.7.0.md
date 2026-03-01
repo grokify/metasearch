@@ -12,7 +12,7 @@ The `mcp-omniserp` MCP server now includes optional secure credential management
 
 - 🔐 **OS Keychain Integration**: API keys can be stored in the OS keychain (macOS Keychain, Windows Credential Manager, Linux Secret Service) instead of environment variables
 - 🛡️ **Security Posture Checking**: Validates system security before granting credential access
-- 📜 **Policy-Based Access Control**: Configure security requirements via `~/.agentplexus/policy.json`
+- 📜 **Policy-Based Access Control**: Configure security requirements via `~/.vaultguard/policy.json`
 - 🔄 **Graceful Fallback**: Automatically uses environment variables when no policy is configured (backward compatible)
 
 **How It Works:**
@@ -34,7 +34,7 @@ export SEARCH_ENGINE="serper"  # optional, defaults to serper
    security add-generic-password -s "omnivault" -a "SERPER_API_KEY" -w "your-key"
    ```
 
-2. Create a security policy (`~/.agentplexus/policy.json`):
+2. Create a security policy (`~/.vaultguard/policy.json`):
    ```json
    {
      "version": 1,
@@ -58,8 +58,8 @@ When running in secure mode, the server logs security check results including:
 - Biometrics configuration status
 
 **New Dependencies:**
-- `github.com/agentplexus/omnivault-keyring` v0.1.0 - OS keychain integration
-- `github.com/agentplexus/vaultguard` v0.2.0 - Security posture checking and policy management
+- `github.com/plexusone/omnivault-keyring` v0.2.0 - OS keychain integration
+- `github.com/plexusone/vaultguard` v0.3.0 - Security posture checking and policy management
 
 ### New Client SDK Functions
 
@@ -70,7 +70,7 @@ When running in secure mode, the server logs security check results including:
 
 ### Refactoring
 - Renamed MCP server from `mcpserver` to `mcp-omniserp` to follow the `mcp-` prefix naming convention
-- Transferred repository to `agentplexus` organization
+- Transferred repository to `plexusone` organization
 
 ### Documentation
 - Added icons to README overview feature list for improved readability
@@ -114,7 +114,7 @@ If you're using the MCP server, update your configuration:
 To upgrade from environment variables to secure keychain storage:
 
 1. Add your API key to the OS keychain
-2. Create a policy file at `~/.agentplexus/policy.json`
+2. Create a policy file at `~/.vaultguard/policy.json`
 3. Remove the `env` section from your MCP config (credentials now come from keychain)
 
 ```json

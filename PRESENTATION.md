@@ -328,7 +328,7 @@ if err != nil {
 ## 4. Secure Credentials with VaultGuard 🔐
 
 ```json
-// ~/.agentplexus/policy.json
+// ~/.vaultguard/policy.json
 {
   "version": 1,
   "local": {
@@ -351,7 +351,7 @@ if err != nil {
 - 📜 **Policy-Based**: Configure minimum security requirements
 - 🔄 **Graceful Fallback**: Uses env vars when no policy exists
 
-🏢 Built on **AgentPlexus VaultGuard** security framework
+🏢 Built on **PlexusOne VaultGuard** security framework
 
 ---
 
@@ -386,7 +386,7 @@ export SERPAPI_API_KEY="your-key"
 ```
 
 ```go
-import "github.com/agentplexus/omniserp/client"
+import "github.com/plexusone/omniserp/client"
 
 c, _ := client.New()
 result, _ := c.Search(ctx, omniserp.SearchParams{
@@ -426,6 +426,6 @@ result, _ := c.Search(ctx, omniserp.SearchParams{
 
 ## OmniSerp 🔍
 
-**github.com/agentplexus/omniserp**
+**github.com/plexusone/omniserp**
 
 🌐 Unified search for the AI agent era

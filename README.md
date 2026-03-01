@@ -34,8 +34,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/agentplexus/omniserp"
-    "github.com/agentplexus/omniserp/client"
+    "github.com/plexusone/omniserp"
+    "github.com/plexusone/omniserp/client"
 )
 
 func main() {
@@ -112,7 +112,7 @@ The Model Context Protocol (MCP) server enables AI assistants to perform web sea
 
 #### Installation
 ```bash
-go install github.com/agentplexus/omniserp/cmd/mcp-omniserp@latest
+go install github.com/plexusone/omniserp/cmd/mcp-omniserp@latest
 ```
 
 Or build from source:
@@ -179,7 +179,7 @@ The MCP server supports optional secure credential management using VaultGuard. 
    security add-generic-password -s "omnivault" -a "SERPER_API_KEY" -w "your-key"
    ```
 
-2. Create a security policy (`~/.agentplexus/policy.json`):
+2. Create a security policy (`~/.vaultguard/policy.json`):
    ```json
    {
      "version": 1,
@@ -219,7 +219,7 @@ The `client` package provides a high-level SDK that simplifies working with mult
 ### Quick Start
 
 ```go
-import "github.com/agentplexus/omniserp/client"
+import "github.com/plexusone/omniserp/client"
 
 // Create client - auto-selects engine based on SEARCH_ENGINE env var
 c, err := client.New()
@@ -317,8 +317,8 @@ import (
     "context"
     "log"
 
-    "github.com/agentplexus/omniserp"
-    "github.com/agentplexus/omniserp/client"
+    "github.com/plexusone/omniserp"
+    "github.com/plexusone/omniserp/client"
 )
 
 func main() {
@@ -387,9 +387,9 @@ For direct registry access:
 
 ```go
 import (
-    "github.com/agentplexus/omniserp"
-    "github.com/agentplexus/omniserp/client/serper"
-    "github.com/agentplexus/omniserp/client/serpapi"
+    "github.com/plexusone/omniserp"
+    "github.com/plexusone/omniserp/client/serper"
+    "github.com/plexusone/omniserp/client/serpapi"
 )
 
 func main() {
@@ -421,13 +421,13 @@ func main() {
 ## Supported Engines
 
 ### Serper
-- **Package**: `github.com/agentplexus/omniserp/client/serper`
+- **Package**: `github.com/plexusone/omniserp/client/serper`
 - **Environment Variable**: `SERPER_API_KEY`
 - **Website**: [serper.dev](https://serper.dev)
 - **Supported Operations**: All search types including Lens
 
 ### SerpAPI
-- **Package**: `github.com/agentplexus/omniserp/client/serpapi`
+- **Package**: `github.com/plexusone/omniserp/client/serpapi`
 - **Environment Variable**: `SERPAPI_API_KEY`
 - **Website**: [serpapi.com](https://serpapi.com)
 - **Supported Operations**: All search types except Lens
@@ -510,8 +510,8 @@ type SearchResult struct {
 ### Basic Registry Operations
 ```go
 import (
-    "github.com/agentplexus/omniserp"
-    "github.com/agentplexus/omniserp/client/serper"
+    "github.com/plexusone/omniserp"
+    "github.com/plexusone/omniserp/client/serper"
 )
 
 // Create new registry and register engines
@@ -572,7 +572,7 @@ import (
     "context"
     "fmt"
     "os"
-    "github.com/agentplexus/omniserp"
+    "github.com/plexusone/omniserp"
 )
 
 type Engine struct {
@@ -603,9 +603,9 @@ func (e *Engine) Search(ctx context.Context, params omniserp.SearchParams) (*omn
 ```go
 // In your application code (e.g., cmd/yourapp/main.go)
 import (
-    "github.com/agentplexus/omniserp"
-    "github.com/agentplexus/omniserp/client/newengine"
-    "github.com/agentplexus/omniserp/client/serper"
+    "github.com/plexusone/omniserp"
+    "github.com/plexusone/omniserp/client/newengine"
+    "github.com/plexusone/omniserp/client/serper"
 )
 
 func createRegistry() *omniserp.Registry {
@@ -683,17 +683,17 @@ go test -v ./client
 
 The registry is safe for concurrent read operations. Engine implementations should be thread-safe for concurrent use.
 
- [build-status-svg]: https://github.com/agentplexus/omniserp/actions/workflows/ci.yaml/badge.svg?branch=main
- [build-status-url]: https://github.com/agentplexus/omniserp/actions/workflows/ci.yaml
- [lint-status-svg]: https://github.com/agentplexus/omniserp/actions/workflows/lint.yaml/badge.svg?branch=main
- [lint-status-url]: https://github.com/agentplexus/omniserp/actions/workflows/lint.yaml
- [goreport-svg]: https://goreportcard.com/badge/github.com/agentplexus/omniserp
- [goreport-url]: https://goreportcard.com/report/github.com/agentplexus/omniserp
- [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/agentplexus/omniserp
- [docs-godoc-url]: https://pkg.go.dev/github.com/agentplexus/omniserp
+ [build-status-svg]: https://github.com/plexusone/omniserp/actions/workflows/go-ci.yaml/badge.svg?branch=main
+ [build-status-url]: https://github.com/plexusone/omniserp/actions/workflows/go-ci.yaml
+ [lint-status-svg]: https://github.com/plexusone/omniserp/actions/workflows/go-lint.yaml/badge.svg?branch=main
+ [lint-status-url]: https://github.com/plexusone/omniserp/actions/workflows/go-lint.yaml
+ [goreport-svg]: https://goreportcard.com/badge/github.com/plexusone/omniserp
+ [goreport-url]: https://goreportcard.com/report/github.com/plexusone/omniserp
+ [docs-godoc-svg]: https://pkg.go.dev/badge/github.com/plexusone/omniserp
+ [docs-godoc-url]: https://pkg.go.dev/github.com/plexusone/omniserp
  [viz-svg]: https://img.shields.io/badge/visualizaton-Go-blue.svg
- [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=agentplexus%2Fomniserp
- [loc-svg]: https://tokei.rs/b1/github/agentplexus/omniserp
- [repo-url]: https://github.com/agentplexus/omniserp
+ [viz-url]: https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=plexusone%2Fomniserp
+ [loc-svg]: https://tokei.rs/b1/github/plexusone/omniserp
+ [repo-url]: https://github.com/plexusone/omniserp
  [license-svg]: https://img.shields.io/badge/license-MIT-blue.svg
- [license-url]: https://github.com/agentplexus/omniserp/blob/master/LICENSE
+ [license-url]: https://github.com/plexusone/omniserp/blob/master/LICENSE

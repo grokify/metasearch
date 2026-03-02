@@ -1,0 +1,68 @@
+site_name: OmniSerp
+site_description: Multi-provider search engine abstraction for Go with MCP server support
+site_url: https://plexusone.github.io/omniserp
+repo_url: https://github.com/plexusone/omniserp
+repo_name: plexusone/omniserp
+
+docs_dir: docs
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Applications:
+    - CLI Tool: applications/cli.md
+    - MCP Server: applications/mcp-server.md
+  - SDK:
+    - Client SDK: sdk/client.md
+    - Normalized Responses: sdk/normalized.md
+  - Engines:
+    - Overview: engines/overview.md
+    - Adding Custom Engines: engines/custom.md
+  - Reference:
+    - Types: reference/types.md
+  - Releases:
+    - v0.8.0: releases/v0.8.0.md
+    - v0.7.0: releases/v0.7.0.md
+  - Presentation: presentation.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/plexusone/omniserp
